@@ -6,7 +6,7 @@ class Instruction < Value
   end
 
   def opcode
-    self.value.to_s(16)[0].to_i(16)
+    @opcode ||= self.value.to_s(16)[0].to_i(16)
   end
 
   def operand
