@@ -8,12 +8,12 @@ require 'value'
 class Register < Value
   def initialize(bits: 1, value: 0)
     @bits = bits
-    super(value)
+    super(value: value)
   end
 
   def value=(new_value)
-    raise StandardError, 'value is not an integer' unless new_value.is_a?(Integer)
-    raise StandardError, 'value is larger than register' if new_value.to_s(2).length > bits
+    fail 'value is not an integer' unless new_value.is_a?(Integer)
+    fail 'value is larger than register' if new_value >= 2 ** bits
     @value = new_value
   end
 
@@ -22,7 +22,7 @@ class Register < Value
   end
 
   def to_hex
-    '0x' + self.to_s(16).rjust(bits, "0")
+    '0x' + self.to_s(16).rjust(bits / 4, "0")
   end
 
   def to_bin

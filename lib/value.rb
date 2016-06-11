@@ -1,12 +1,12 @@
 class Value
   attr_reader :value
 
-  def initialize(value)
+  def initialize(value:)
     self.value = value
   end
 
   def value=(new_value)
-    raise StandardError, 'value is not an integer' unless new_value.is_a?(Integer)
+    fail 'value is not an integer' unless new_value.is_a?(Integer)
     @value = new_value
   end
 
