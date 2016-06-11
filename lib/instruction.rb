@@ -6,11 +6,15 @@ class Instruction < Value
   end
 
   def opcode
-    @opcode ||= self.value.to_s(16)[0].to_i(16)
+    @opcode ||= value.to_s(16)[0].to_i(16)
   end
 
   def operand
-    @operand ||= Value.new(value: self.value.to_s(16)[1].to_i(16))
+    @operand ||= Value.new(value: value.to_s(16)[1].to_i(16))
+  end
+
+  def bits
+    8
   end
 
   private

@@ -20,12 +20,4 @@ class Register < Value
   def bits
     @bits
   end
-
-  def to_hex
-    '0x' + self.to_s(16).rjust(bits / 4, "0")
-  end
-
-  def to_bin
-    super.rjust(bits, "0")
-  end
 end

@@ -11,7 +11,7 @@ class Value
   end
 
   def bits
-    self.to_bin.length
+    Math.log2(value).to_i + 1
   end
 
   def to_int
@@ -25,10 +25,10 @@ class Value
   end
 
   def to_hex
-    '0x' + self.to_s(16)
+    '0x' + self.to_s(16).rjust(bits / 4, "0")
   end
 
   def to_bin
-    self.to_s(2)
+    self.to_s(2).rjust(bits, "0")
   end
 end
