@@ -5,11 +5,7 @@ RSpec.describe Instruction do
     it 'initializes an empty instruction' do
       instruction = Instruction.new
 
-      expect(instruction.value).to eq(0)
-    end
-
-    it 'cannot set a value larger than 8 bits' do
-      expect{ Instruction.new(value: 0xfff) }.to raise_error(StandardError, 'value is larger than 8 bits')
+      expect(instruction.get).to eq(0)
     end
   end
 
@@ -26,14 +22,15 @@ RSpec.describe Instruction do
       instruction = Instruction.new(value: '11110000'.to_i(2))
 
       expect(instruction.operand).to be_a(Value)
+      expect(instruction.operand.get).to eq(0x0)
     end
   end
 
-  describe 'value=' do
+  describe 'set' do
     it 'is a private method' do
       instruction = Instruction.new
 
-      expect{ instruction.value = 123 }.to raise_error(NoMethodError)
+      expect{ instruction.set(0xff) }.to raise_error(NoMethodError)
     end
   end
 end

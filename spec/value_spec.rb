@@ -5,31 +5,31 @@ RSpec.describe Value do
     it 'initializes a value with the given default value' do
       value = Value.new(value: 1)
 
-      expect(value.value).to eq(1)
+      expect(value.get).to eq(1)
     end
   end
 
-  describe 'value=' do
-    it 'assigns a new value' do
+  describe 'set' do
+    it 'sets the value to a new value' do
       value = Value.new(value: 1)
 
-      value.value = 2
+      value.set(2)
 
-      expect(value.value).to eq(2)
+      expect(value.get).to eq(2)
     end
 
     it 'only stores integers' do
       value = Value.new(value: 1)
 
-      expect{ value.value = 'foo' }.to raise_exception(StandardError, 'value is not an integer')
+      expect{ value.set('foo') }.to raise_exception(StandardError, 'value is not an integer')
     end
   end
 
-  describe 'value' do
+  describe 'get' do
     it 'returns a decimal integer' do
       value = Value.new(value: 11)
 
-      expect(value.value).to eq(11)
+      expect(value.get).to eq(11)
     end
   end
 

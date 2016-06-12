@@ -17,35 +17,37 @@ RSpec.describe Register do
     it 'initializes a register with default value of 0' do
       register = Register.new
 
-      expect(register.value).to eq(0)
+      expect(register.get).to eq(0)
     end
 
     it 'initializes a register with the given default value' do
       register = Register.new(value: 1)
 
-      expect(register.value).to eq(1)
+      expect(register.get).to eq(1)
     end
   end
 
-  describe 'value=' do
-    it 'stores a value less than or equal to bits' do
-      register = Register.new
-
-      register.value = 1
-
-      expect(register.value).to eq(1)
-    end
-
-    it 'does not store a value larger than bits' do
-      register = Register.new
-
-      expect{ register.value = 2 }.to raise_exception(StandardError, 'value is larger than register')
-    end
-
+  describe 'set' do
     it 'only stores integers' do
       register = Register.new
 
-      expect{ register.value = 'foo' }.to raise_exception(StandardError, 'value is not an integer')
+      expect{ register.set('foo') }.to raise_exception(StandardError, 'value is not an integer')
+    end
+
+    it 'only stores the first n bits' do
+      register = Register.new(bits: 4)
+
+      register.set(0xff)
+
+      expect(register.get).to eq(0xf)
+    end
+
+    it 'stores a value less <= n bits' do
+      register = Register.new
+
+      register.set(0xf)
+
+      expect(register.get).to eq(0x1)
     end
   end
 

@@ -2,15 +2,15 @@ require 'value'
 
 class Instruction < Value
   def initialize(value: 0)
-    super(value: value)
+    set(value)
   end
 
   def opcode
-    @opcode ||= value.to_s(16)[0].to_i(16)
+    @opcode ||= self.to_i >> 4
   end
 
   def operand
-    @operand ||= Value.new(value: value.to_s(16)[1].to_i(16))
+    @operand ||= Value.new(value: self[4..-1].join.to_i(2))
   end
 
   def bits
@@ -19,9 +19,9 @@ class Instruction < Value
 
   private
 
-    def value=(new_value)
+    def set(new_value)
       fail 'value is not an integer' unless new_value.is_a?(Integer)
-      fail 'value is larger than 8 bits' if new_value > 0xff
-      @value = new_value
+      replace(new_value.to_s(2).chars.last(bits).map(&:to_i))
+      unshift(0) until length >= bits
     end
 end

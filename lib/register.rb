@@ -11,10 +11,10 @@ class Register < Value
     super(value: value)
   end
 
-  def value=(new_value)
+  def set(new_value)
     fail 'value is not an integer' unless new_value.is_a?(Integer)
-    fail 'value is larger than register' if new_value >= 2 ** bits
-    @value = new_value
+    replace(new_value.to_s(2).chars.last(bits).map(&:to_i))
+    unshift(0) until length >= bits
   end
 
   def bits
