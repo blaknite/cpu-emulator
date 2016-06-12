@@ -17,7 +17,7 @@ RSpec.describe Operation::NOP do
     it 'increments the program counter' do
       computer = Computer.new
       operation = Operation::NOP.new(computer)
-      operation.clock
+      8.times{ operation.clock }
 
       expect(computer.pc.get).to eq(1)
     end
@@ -34,7 +34,7 @@ RSpec.describe Operation::NOP do
     it 'returns true when all steps are complete' do
       computer = Computer.new
       operation = Operation::NOP.new(computer)
-      operation.clock
+      8.times{ operation.clock }
 
       expect(operation.complete?).to eq(true)
     end
@@ -49,6 +49,74 @@ RSpec.describe Operation::JMP do
     computer.ram[1].set(0x0)
     computer.ram[2].set(0x4)
     computer.ram[3].set(0xc)
+
+    expect(computer.pc.get).to eq(0x0)
+
+    operation.clock until operation.complete?
+
+    expect(computer.pc.get).to eq(0x04c)
+  end
+end
+
+RSpec.describe Operation::JC do
+  it 'does not change the value of the program counter if carry is 0' do
+    computer = Computer.new
+    operation = Operation::JC.new(computer)
+
+    computer.ram[1].set(0x0)
+    computer.ram[2].set(0x4)
+    computer.ram[3].set(0xc)
+    computer.c.set(0)
+
+    expect(computer.pc.get).to eq(0x0)
+
+    operation.clock until operation.complete?
+
+    expect(computer.pc.get).to eq(0x004)
+  end
+
+  it 'changes the value of the program counter if carry is 1' do
+    computer = Computer.new
+    operation = Operation::JC.new(computer)
+
+    computer.ram[1].set(0x0)
+    computer.ram[2].set(0x4)
+    computer.ram[3].set(0xc)
+    computer.c.set(1)
+
+    expect(computer.pc.get).to eq(0x0)
+
+    operation.clock until operation.complete?
+
+    expect(computer.pc.get).to eq(0x04c)
+  end
+end
+
+RSpec.describe Operation::JZ do
+  it 'does not change the value of the program counter if zero is 0' do
+    computer = Computer.new
+    operation = Operation::JZ.new(computer)
+
+    computer.ram[1].set(0x0)
+    computer.ram[2].set(0x4)
+    computer.ram[3].set(0xc)
+    computer.z.set(0)
+
+    expect(computer.pc.get).to eq(0x0)
+
+    operation.clock until operation.complete?
+
+    expect(computer.pc.get).to eq(0x004)
+  end
+
+  it 'changes the value of the program counter if zero is 1' do
+    computer = Computer.new
+    operation = Operation::JZ.new(computer)
+
+    computer.ram[1].set(0x0)
+    computer.ram[2].set(0x4)
+    computer.ram[3].set(0xc)
+    computer.z.set(1)
 
     expect(computer.pc.get).to eq(0x0)
 
