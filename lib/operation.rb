@@ -11,7 +11,7 @@ class Operation
   end
 
   def perform
-    # do nothing
+    @computer.pc.set(@computer.pc.get + 1)
   end
 end
 
@@ -44,7 +44,10 @@ class Operation::ST < Operation
 end
 
 class Operation::STC < Operation
-
+  def perform
+    @computer.c.set(@operand)
+    super
+  end
 end
 
 class Operation::IN < Operation
