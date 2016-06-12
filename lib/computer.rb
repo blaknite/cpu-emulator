@@ -1,7 +1,5 @@
-require 'instruction'
 require 'operation'
 require 'register'
-require 'value'
 
 class Computer
   attr_reader :accumulator, :carry, :program_counter, :ram, :zero

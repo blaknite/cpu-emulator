@@ -30,7 +30,6 @@ RSpec.describe Register do
 
     it 'only stores the first n bits' do
       register = Register.new(4)
-
       register.set(0xff)
 
       expect(register.get).to eq(0xf)
@@ -38,10 +37,35 @@ RSpec.describe Register do
 
     it 'stores a value less <= n bits' do
       register = Register.new(1)
-
       register.set(0xf)
 
       expect(register.get).to eq(0x1)
+    end
+  end
+
+  describe 'incr' do
+    it 'increments the value by 1' do
+      register = Register.new(1)
+
+      expect{ register.incr }.to change{ register.get }.by(1)
+    end
+  end
+
+  describe 'decr' do
+    it 'decrements the value by 1' do
+      register = Register.new(1)
+      register.set(1)
+
+      expect{ register.decr }.to change{ register.get }.by(-1)
+    end
+  end
+
+  describe 'get' do
+    it 'returns an integer' do
+      register = Register.new(4)
+      register.set(0xa)
+
+      expect(register.get).to eq(0xa)
     end
   end
 
@@ -50,6 +74,24 @@ RSpec.describe Register do
       register = Register.new(4)
 
       expect(register.bits).to eq(4)
+    end
+  end
+
+  describe 'to_s' do
+    it 'returns value as a decimal string' do
+      register = Register.new(4)
+      register.set(0xa)
+
+      expect(register.to_s).to eq('10')
+    end
+  end
+
+  describe 'to_int' do
+    it 'returns value as an integer' do
+      register = Register.new(4)
+      register.set(0xa)
+
+      expect(register.to_int).to eq(0xa)
     end
   end
 

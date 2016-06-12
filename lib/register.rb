@@ -1,14 +1,14 @@
-require 'value'
-
 ##
 # Represntation of a data register
 #
 # Can be of any number of bits.
 # Only accepts integers whose binary representation is less or equal the register's bit length.
-class Register < Value
+class Register < Array
+  attr_reader :bits
+
   def initialize(bits, value = 0)
     @bits = bits
-    super(value)
+    set(value)
   end
 
   def set(new_value)
@@ -17,7 +17,30 @@ class Register < Value
     unshift(0) until length >= bits
   end
 
-  def bits
-    @bits
+  def incr
+    set(self.get + 1)
+  end
+
+  def decr
+    set(self.get - 1)
+  end
+
+  def get
+    join.to_i(2)
+  end
+
+  alias_method :to_int, :get
+  alias_method :to_i, :get
+
+  def to_s(base = 10)
+    get.to_s(base)
+  end
+
+  def to_hex
+    '0x' + to_s(16).rjust(bits / 4, "0")
+  end
+
+  def to_bin
+    to_s(2).rjust(bits, "0")
   end
 end
