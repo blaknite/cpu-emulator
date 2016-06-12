@@ -1,6 +1,6 @@
 class Value < Array
   def initialize(value:)
-    self.set(value)
+    set(value)
   end
 
   def set(new_value)

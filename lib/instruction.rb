@@ -2,7 +2,7 @@ require 'value'
 
 class Instruction < Value
   def initialize(value: 0)
-    set(value)
+    super(value: value)
   end
 
   def opcode
