@@ -6,9 +6,9 @@ require 'value'
 # Can be of any number of bits.
 # Only accepts integers whose binary representation is less or equal the register's bit length.
 class Register < Value
-  def initialize(bits: 1, value: 0)
+  def initialize(bits, value = 0)
     @bits = bits
-    super(value: value)
+    super(value)
   end
 
   def set(new_value)

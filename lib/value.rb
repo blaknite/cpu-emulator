@@ -1,5 +1,5 @@
 class Value < Array
-  def initialize(value:)
+  def initialize(value)
     set(value)
   end
 

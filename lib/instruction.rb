@@ -1,8 +1,8 @@
 require 'value'
 
 class Instruction < Value
-  def initialize(value: 0)
-    super(value: value)
+  def initialize(value)
+    super(value)
   end
 
   def opcode
@@ -10,7 +10,7 @@ class Instruction < Value
   end
 
   def operand
-    @operand ||= Value.new(value: self[4..-1].join.to_i(2))
+    @operand ||= Value.new(self[4..-1].join.to_i(2))
   end
 
   def bits
