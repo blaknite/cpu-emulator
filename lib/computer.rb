@@ -3,7 +3,7 @@ require 'operation'
 require 'register'
 require 'value'
 
-class LB100
+class Computer
   attr_reader :accumulator, :carry, :program_counter, :ram, :zero
 
   alias_method :a, :accumulator
