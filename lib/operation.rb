@@ -1,11 +1,12 @@
 class Operation
   OPCODE_MAP = %w(NOP JMP JC JZ LD LDI ST STC IN OUT NOR NORI ADD ADDI SUB SUBI)
 
-  def self.from_instruction(instruction)
-    Object.const_get("Operation::#{OPCODE_MAP[instruction.opcode]}").new(instruction.operand)
+  def self.from_instruction(computer, instruction)
+    Object.const_get("Operation::#{OPCODE_MAP[instruction.opcode]}").new(computer, instruction.operand)
   end
 
-  def initialize(operand)
+  def initialize(computer, operand)
+    @computer = computer
     @operand = operand
   end
 
