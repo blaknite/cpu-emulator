@@ -24,3 +24,14 @@ No doubt I'll find ways it doesn't work and the design will change.
 ```
 
 Instructions 2-4 nibbles in length. Shared memory of 4096 nibbles. 16 addressable input and output busses.
+
+```ruby
+# initialize a computer
+c = Computer.new
+
+# load 4 to a, add 4, store to 0xfff and then hang
+c.load_program("0x5 0x4 0xd 0x4 0x6 0xf 0xf 0xf 0x1 0x0 0x0 0x8")
+
+# run the above program
+c.run
+```
