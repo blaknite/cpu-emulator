@@ -15,6 +15,22 @@ RSpec.describe Computer do
       expect(computer.c).to be_a(Register)
       expect(computer.c.bits).to eq(1)
 
+      # the input must be an array of 16 4-bit registers
+      expect(computer.in).to be_a(Array)
+      expect(computer.in.length).to eq(16)
+      computer.in.each do |r|
+        expect(r).to be_a(Register)
+        expect(computer.a.bits).to eq(4)
+      end
+
+      # the output must be an array of 16 4-bit registers
+      expect(computer.out).to be_a(Array)
+      expect(computer.out.length).to eq(16)
+      computer.out.each do |r|
+        expect(r).to be_a(Register)
+        expect(computer.a.bits).to eq(4)
+      end
+
       # the program counter must be a 12-bit regisiter so we can store memory addresses
       expect(computer.pc).to be_a(Register)
       expect(computer.pc.bits).to eq(12)

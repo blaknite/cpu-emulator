@@ -13,8 +13,7 @@ class Register < Array
 
   def value=(new_value)
     fail 'value is not an integer' unless new_value.is_a?(Integer)
-    replace(new_value.to_s(2).chars.last(bits).map(&:to_i))
-    unshift(0) until length >= bits
+    replace((@bits - 1).downto(0).map{ |n| new_value[n] })
   end
 
   def value
@@ -33,6 +32,6 @@ class Register < Array
   end
 
   def to_bin
-    to_s(2).rjust(bits, "0")
+    join.rjust(bits, "0")
   end
 end
