@@ -11,6 +11,10 @@ class Operation
     8.times{ @steps << -> {} }
   end
 
+  def name
+    self.class.name.split('::').last
+  end
+
   def clock
     @steps.shift.call
   end

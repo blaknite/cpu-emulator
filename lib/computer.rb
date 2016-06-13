@@ -25,5 +25,36 @@ class Computer
     @ram = []
     4096.times{ @ram << Register.new(4) }
     @zero = Register.new(1)
+    @operation = nil
+  end
+
+  def load_program(program_data)
+    program_data.split(' ').each_with_index do |pd, i|
+      @ram[i].value = pd.to_i(16)
+    end
+  end
+
+  def run
+    print 'Running...'
+
+    while true do
+      clock
+      sleep 1.0 / 8
+    end
+  end
+
+  def clock
+    if op.nil? || op.complete?
+      @operation = Operation.from_opcode(ram[pc.value].value, self)
+
+      print "\n#{pc.to_hex} - #{op.name} - |"
+    end
+
+    op.clock
+
+    print '#'
+    print "|" if op.complete?
+
+    nil
   end
 end
