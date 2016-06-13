@@ -8,32 +8,24 @@ class Register < Array
 
   def initialize(bits, value = 0)
     @bits = bits
-    set(value)
+    self.value = value
   end
 
-  def set(new_value)
+  def value=(new_value)
     fail 'value is not an integer' unless new_value.is_a?(Integer)
     replace(new_value.to_s(2).chars.last(bits).map(&:to_i))
     unshift(0) until length >= bits
   end
 
-  def incr
-    set(self.get + 1)
-  end
-
-  def decr
-    set(self.get - 1)
-  end
-
-  def get
+  def value
     join.to_i(2)
   end
 
-  alias_method :to_int, :get
-  alias_method :to_i, :get
+  alias_method :to_int, :value
+  alias_method :to_i, :value
 
   def to_s(base = 10)
-    get.to_s(base)
+    value.to_s(base)
   end
 
   def to_hex

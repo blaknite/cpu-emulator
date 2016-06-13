@@ -15,6 +15,6 @@ class Computer
     @program_counter = Register.new(12)
     @zero = Register.new(1)
     @ram = []
-    @ram << Register.new(4) until @ram.length > 0xfff
+    4096.times{ @ram << Register.new(4) }
   end
 end

@@ -11,61 +11,44 @@ RSpec.describe Register do
     it 'initializes a register with default value of 0' do
       register = Register.new(1)
 
-      expect(register.get).to eq(0)
+      expect(register.value).to eq(0)
     end
 
     it 'initializes a register with the given initial value' do
       register = Register.new(1, 1)
 
-      expect(register.get).to eq(1)
+      expect(register.value).to eq(1)
     end
   end
 
-  describe 'set' do
+  describe 'value=' do
     it 'only stores integers' do
       register = Register.new(1)
 
-      expect{ register.set('foo') }.to raise_exception(StandardError, 'value is not an integer')
+      expect{ register.value = 'foo' }.to raise_exception(StandardError, 'value is not an integer')
     end
 
     it 'only stores the first n bits' do
       register = Register.new(4)
-      register.set(0xff)
+      register.value = 0xff
 
-      expect(register.get).to eq(0xf)
+      expect(register.value).to eq(0xf)
     end
 
     it 'stores a value less <= n bits' do
       register = Register.new(1)
-      register.set(0xf)
+      register.value = 0xf
 
-      expect(register.get).to eq(0x1)
+      expect(register.value).to eq(0x1)
     end
   end
 
-  describe 'incr' do
-    it 'increments the value by 1' do
-      register = Register.new(1)
-
-      expect{ register.incr }.to change{ register.get }.by(1)
-    end
-  end
-
-  describe 'decr' do
-    it 'decrements the value by 1' do
-      register = Register.new(1)
-      register.set(1)
-
-      expect{ register.decr }.to change{ register.get }.by(-1)
-    end
-  end
-
-  describe 'get' do
+  describe 'value' do
     it 'returns an integer' do
       register = Register.new(4)
-      register.set(0xa)
+      register.value = 0xa
 
-      expect(register.get).to eq(0xa)
+      expect(register.value).to eq(0xa)
     end
   end
 
@@ -80,7 +63,7 @@ RSpec.describe Register do
   describe 'to_s' do
     it 'returns value as a decimal string' do
       register = Register.new(4)
-      register.set(0xa)
+      register.value = 0xa
 
       expect(register.to_s).to eq('10')
     end
@@ -89,7 +72,7 @@ RSpec.describe Register do
   describe 'to_int' do
     it 'returns value as an integer' do
       register = Register.new(4)
-      register.set(0xa)
+      register.value = 0xa
 
       expect(register.to_int).to eq(0xa)
     end
