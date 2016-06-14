@@ -331,6 +331,24 @@ RSpec.describe Operation::ADD do
       expect(computer.a.value).to eq(0x8)
     end
 
+    it 'adds the operand and the accumulator with carry' do
+      computer = Computer.new
+      operation = Operation::ADD.new(computer)
+
+      computer.a.value = 0x4
+      computer.c.value = 0x1
+
+      computer.ram[0x001].value = 0x0
+      computer.ram[0x002].value = 0x4
+      computer.ram[0x003].value = 0xc
+
+      computer.ram[0x04c].value = 0x4
+
+      operation.clock! until operation.complete?
+
+      expect(computer.a.value).to eq(0x9)
+    end
+
     it 'sets the carry flag to 0 if the result is smaller than 4 bits' do
       computer = Computer.new
       operation = Operation::ADD.new(computer)
@@ -413,6 +431,19 @@ RSpec.describe Operation::ADDI do
       operation.clock! until operation.complete?
 
       expect(computer.a.value).to eq(0x8)
+    end
+
+    it 'adds the operand and the accumulator with carry' do
+      computer = Computer.new
+      operation = Operation::ADDI.new(computer)
+
+      computer.a.value = 0x4
+      computer.c.value = 0x1
+      computer.ram[0x001].value = 0x4
+
+      operation.clock! until operation.complete?
+
+      expect(computer.a.value).to eq(0x9)
     end
 
     it 'sets the carry flag to 0 if the result is smaller than 4 bits' do

@@ -177,7 +177,7 @@ class Operation::ADD < Operation
     @steps[4] = -> { @computer.pc.value += 1 }
     @steps[5] = -> { @operand += @computer.ram[@computer.pc.value].value }
     @steps[6] = -> {
-      result = @computer.a.value + @computer.ram[@operand].value
+      result = @computer.a.value + @computer.ram[@operand].value + @computer.c.value
       @computer.a.value = result
       @computer.c.value = result[4]
       @computer.z.value = result & 0x0f == 0 ? 1 : 0
@@ -191,7 +191,7 @@ class Operation::ADDI < Operation
     super(computer)
     @steps[0] = -> { @computer.pc.value += 1 }
     @steps[1] = -> {
-      result = @computer.a.value + @computer.ram[@computer.pc.value].value
+      result = @computer.a.value + @computer.ram[@computer.pc.value].value + @computer.c.value
       @computer.a.value = result
       @computer.c.value = result[4]
       @computer.z.value = result & 0x0f == 0 ? 1 : 0
