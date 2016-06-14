@@ -15,7 +15,7 @@ class Operation
     self.class.name.split('::').last
   end
 
-  def clock
+  def clock!
     @steps.shift.call
   end
 

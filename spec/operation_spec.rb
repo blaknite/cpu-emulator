@@ -17,7 +17,7 @@ RSpec.describe Operation::NOP do
     it 'increments the program counter' do
       computer = Computer.new
       operation = Operation::NOP.new(computer)
-      8.times{ operation.clock }
+      8.times{ operation.clock! }
 
       expect(computer.pc.value).to eq(1)
     end
@@ -34,7 +34,7 @@ RSpec.describe Operation::NOP do
     it 'returns true when all steps are complete' do
       computer = Computer.new
       operation = Operation::NOP.new(computer)
-      8.times{ operation.clock }
+      8.times{ operation.clock! }
 
       expect(operation.complete?).to eq(true)
     end
@@ -52,7 +52,7 @@ RSpec.describe Operation::JMP do
 
     expect(computer.pc.value).to eq(0x0)
 
-    operation.clock until operation.complete?
+    operation.clock! until operation.complete?
 
     expect(computer.pc.value).to eq(0x04c)
   end
@@ -70,7 +70,7 @@ RSpec.describe Operation::JC do
 
     expect(computer.pc.value).to eq(0x0)
 
-    operation.clock until operation.complete?
+    operation.clock! until operation.complete?
 
     expect(computer.pc.value).to eq(0x004)
   end
@@ -86,7 +86,7 @@ RSpec.describe Operation::JC do
 
     expect(computer.pc.value).to eq(0x0)
 
-    operation.clock until operation.complete?
+    operation.clock! until operation.complete?
 
     expect(computer.pc.value).to eq(0x04c)
   end
@@ -104,7 +104,7 @@ RSpec.describe Operation::JZ do
 
     expect(computer.pc.value).to eq(0x0)
 
-    operation.clock until operation.complete?
+    operation.clock! until operation.complete?
 
     expect(computer.pc.value).to eq(0x004)
   end
@@ -120,7 +120,7 @@ RSpec.describe Operation::JZ do
 
     expect(computer.pc.value).to eq(0x0)
 
-    operation.clock until operation.complete?
+    operation.clock! until operation.complete?
 
     expect(computer.pc.value).to eq(0x04c)
   end
@@ -140,7 +140,7 @@ RSpec.describe Operation::LD do
 
       expect(computer.a.value).to eq(0x0)
 
-      operation.clock until operation.complete?
+      operation.clock! until operation.complete?
 
       expect(computer.a.value).to eq(0x4)
     end
@@ -157,7 +157,7 @@ RSpec.describe Operation::LDI do
 
       expect(computer.a.value).to eq(0x0)
 
-      operation.clock until operation.complete?
+      operation.clock! until operation.complete?
 
       expect(computer.a.value).to eq(0x4)
     end
@@ -176,7 +176,7 @@ RSpec.describe Operation::ST do
 
       computer.a.value = 0x4
 
-      operation.clock until operation.complete?
+      operation.clock! until operation.complete?
 
       expect(computer.ram[0x04c].value).to eq(0x4)
     end
@@ -191,7 +191,7 @@ RSpec.describe Operation::STC do
 
       computer.ram[0x001].value = 1
 
-      operation.clock until operation.complete?
+      operation.clock! until operation.complete?
 
       expect(computer.c.value).to eq(1)
     end
@@ -203,7 +203,7 @@ RSpec.describe Operation::STC do
       computer.c.value = 0
       computer.ram[0x001].value = 0
 
-      operation.clock until operation.complete?
+      operation.clock! until operation.complete?
 
       expect(computer.c.value).to eq(0)
     end
@@ -221,7 +221,7 @@ RSpec.describe Operation::IN do
 
       expect(computer.a.value).to eq(0x0)
 
-      operation.clock until operation.complete?
+      operation.clock! until operation.complete?
 
       expect(computer.a.value).to eq(0x4)
     end
@@ -239,7 +239,7 @@ RSpec.describe Operation::OUT do
 
       expect(computer.out[0x0].value).to eq(0x0)
 
-      operation.clock until operation.complete?
+      operation.clock! until operation.complete?
 
       expect(computer.out[0x0].value).to eq(0x4)
     end
@@ -260,7 +260,7 @@ RSpec.describe Operation::NOR do
 
       computer.ram[0x04c].value = "0101".to_i(2)
 
-      operation.clock until operation.complete?
+      operation.clock! until operation.complete?
 
       expect(computer.a.to_bin).to eq("1010")
     end
@@ -277,7 +277,7 @@ RSpec.describe Operation::NOR do
 
       computer.ram[0x04c].value = "0101".to_i(2)
 
-      operation.clock until operation.complete?
+      operation.clock! until operation.complete?
 
       expect(computer.z.value).to eq(1)
     end
@@ -294,7 +294,7 @@ RSpec.describe Operation::NOR do
 
       computer.ram[0x04c].value = "0101".to_i(2)
 
-      operation.clock until operation.complete?
+      operation.clock! until operation.complete?
 
       expect(computer.z.value).to eq(0)
     end
@@ -305,7 +305,7 @@ RSpec.describe Operation::NOR do
 
       computer.c.value = 1
 
-      operation.clock until operation.complete?
+      operation.clock! until operation.complete?
 
       expect(computer.c.value).to eq(0)
     end
@@ -326,7 +326,7 @@ RSpec.describe Operation::ADD do
 
       computer.ram[0x04c].value = 0x4
 
-      operation.clock until operation.complete?
+      operation.clock! until operation.complete?
 
       expect(computer.a.value).to eq(0x8)
     end
@@ -343,7 +343,7 @@ RSpec.describe Operation::ADD do
 
       computer.ram[0x04c].value = 0x4
 
-      operation.clock until operation.complete?
+      operation.clock! until operation.complete?
 
       expect(computer.c.value).to eq(0)
     end
@@ -360,7 +360,7 @@ RSpec.describe Operation::ADD do
 
       computer.ram[0x04c].value = 0x4
 
-      operation.clock until operation.complete?
+      operation.clock! until operation.complete?
 
       expect(computer.c.value).to eq(1)
     end
@@ -377,7 +377,7 @@ RSpec.describe Operation::ADD do
 
       computer.ram[0x04c].value = 0x4
 
-      operation.clock until operation.complete?
+      operation.clock! until operation.complete?
 
       expect(computer.z.value).to eq(0)
     end
@@ -394,7 +394,7 @@ RSpec.describe Operation::ADD do
 
       computer.ram[0x04c].value = 0x1
 
-      operation.clock until operation.complete?
+      operation.clock! until operation.complete?
 
       expect(computer.z.value).to eq(1)
     end
@@ -410,7 +410,7 @@ RSpec.describe Operation::ADDI do
       computer.a.value = 0x4
       computer.ram[0x001].value = 0x4
 
-      operation.clock until operation.complete?
+      operation.clock! until operation.complete?
 
       expect(computer.a.value).to eq(0x8)
     end
@@ -422,7 +422,7 @@ RSpec.describe Operation::ADDI do
       computer.a.value = 0x4
       computer.ram[0x001].value = 0x4
 
-      operation.clock until operation.complete?
+      operation.clock! until operation.complete?
 
       expect(computer.c.value).to eq(0)
     end
@@ -434,7 +434,7 @@ RSpec.describe Operation::ADDI do
       computer.a.value = 0xf
       computer.ram[0x001].value = 0x4
 
-      operation.clock until operation.complete?
+      operation.clock! until operation.complete?
 
       expect(computer.c.value).to eq(1)
     end
@@ -446,7 +446,7 @@ RSpec.describe Operation::ADDI do
       computer.a.value = 0x4
       computer.ram[0x001].value = 0x4
 
-      operation.clock until operation.complete?
+      operation.clock! until operation.complete?
 
       expect(computer.z.value).to eq(0)
     end
@@ -458,7 +458,7 @@ RSpec.describe Operation::ADDI do
       computer.a.value = 0xf
       computer.ram[0x001].value = 0x1
 
-      operation.clock until operation.complete?
+      operation.clock! until operation.complete?
 
       expect(computer.z.value).to eq(1)
     end
@@ -473,7 +473,7 @@ RSpec.describe Operation::CMP do
 
       computer.a.value = 0x4
 
-      operation.clock until operation.complete?
+      operation.clock! until operation.complete?
 
       expect(computer.a.value).to eq(0x4)
     end
@@ -490,7 +490,7 @@ RSpec.describe Operation::CMP do
 
       computer.ram[0x04c].value = 0x4
 
-      operation.clock until operation.complete?
+      operation.clock! until operation.complete?
 
       expect(computer.c.value).to eq(0)
     end
@@ -507,7 +507,7 @@ RSpec.describe Operation::CMP do
 
       computer.ram[0x04c].value = 0xf
 
-      operation.clock until operation.complete?
+      operation.clock! until operation.complete?
 
       expect(computer.c.value).to eq(1)
     end
@@ -524,7 +524,7 @@ RSpec.describe Operation::CMP do
 
       computer.ram[0x04c].value = 0x2
 
-      operation.clock until operation.complete?
+      operation.clock! until operation.complete?
 
       expect(computer.z.value).to eq(0)
     end
@@ -541,7 +541,7 @@ RSpec.describe Operation::CMP do
 
       computer.ram[0x04c].value = 0x4
 
-      operation.clock until operation.complete?
+      operation.clock! until operation.complete?
 
       expect(computer.z.value).to eq(1)
     end
@@ -556,7 +556,7 @@ RSpec.describe Operation::CMPI do
 
       computer.a.value = 0x4
 
-      operation.clock until operation.complete?
+      operation.clock! until operation.complete?
 
       expect(computer.a.value).to eq(0x4)
     end
@@ -568,7 +568,7 @@ RSpec.describe Operation::CMPI do
       computer.a.value = 0x4
       computer.ram[0x001].value = 0x4
 
-      operation.clock until operation.complete?
+      operation.clock! until operation.complete?
 
       expect(computer.c.value).to eq(0)
     end
@@ -580,7 +580,7 @@ RSpec.describe Operation::CMPI do
       computer.a.value = 0x1
       computer.ram[0x001].value = 0xf
 
-      operation.clock until operation.complete?
+      operation.clock! until operation.complete?
 
       expect(computer.c.value).to eq(1)
     end
@@ -592,7 +592,7 @@ RSpec.describe Operation::CMPI do
       computer.a.value = 0x4
       computer.ram[0x001].value = 0x8
 
-      operation.clock until operation.complete?
+      operation.clock! until operation.complete?
 
       expect(computer.z.value).to eq(0)
     end
@@ -604,7 +604,7 @@ RSpec.describe Operation::CMPI do
       computer.a.value = 0x4
       computer.ram[0x001].value = 0x4
 
-      operation.clock until operation.complete?
+      operation.clock! until operation.complete?
 
       expect(computer.z.value).to eq(1)
     end

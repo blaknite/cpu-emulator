@@ -34,23 +34,23 @@ class Computer
     end
   end
 
-  def run
+  def run!
     print 'Running...'
 
     while true do
-      clock
+      clock!
       sleep 1.0 / 8
     end
   end
 
-  def clock
+  def clock!
     if op.nil? || op.complete?
       @operation = Operation.from_opcode(ram[pc.value].value, self)
 
-      print "\n#{pc.to_hex} - #{op.name} - |"
+      print "\n#{pc.to_hex} - #{op.name.ljust(4)} - |"
     end
 
-    op.clock
+    op.clock!
 
     print '#'
     print "|" if op.complete?
