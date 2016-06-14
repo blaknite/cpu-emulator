@@ -45,7 +45,7 @@ class Assembler
         # nothing to do
 
       elsif %w(JMP JC JZ).include?(parts[0])
-        if parts[1] =~ /\d+/
+        if parts[1] =~ /^(0x)?\d+$/
           operand = parts[1].to_i(16)
         else
           if pass == 0
