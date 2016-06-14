@@ -1,15 +1,18 @@
 ; perform all arithmetic operations
-START   LDI   0x0
+START   LDI   0x6
         ST    0xff0
-        LDI   0x6
+        LDI   0x2
         ST    0xff1
-        JMP   SUB     ; change this to perform a different operation
-RETURN  ST    0xfff
+        JMP   MUL     ; change this to perform a different operation
 DONE    JMP   DONE
 
-; perform SUB
+; perform subtraction
 SUB     LDI   0x0
-        STC   0x1
-        LD    0xff0
-        ADD   0xff1
-        JMP   RETURN
+        STC   0x0
+        LD    0xff1   ; load second value
+        NORI  0x0     ; 2's compliment
+        ADDI  0x1
+        STC   0x0
+        ADD   0xff0   ; add to first value
+        ST    0xfff   ; store result
+        JMP   DONE    ; job done
