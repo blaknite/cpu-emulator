@@ -70,7 +70,7 @@ class Assembler
       elsif %w(LDI STC IN OUT NORI ADDI CMPI).include?(parts[0])
         operand = parts[1].to_i(16)
 
-        @program_data << operand.to_i
+        @program_data << (operand.to_i & 0x00f)
 
       end
 
