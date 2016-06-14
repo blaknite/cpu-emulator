@@ -25,13 +25,25 @@ No doubt I'll find ways it doesn't work and the design will change.
 
 Instructions 2-4 nibbles in length. Shared memory of 4096 nibbles. 16 addressable input and output busses.
 
-```ruby
-# initialize a computer
-c = Computer.new
+## Example
 
-# load 4 to a, add 4, store to 0xfff and then hang
-c.load_program("0x5 0x4 0xd 0x4 0x6 0xf 0xf 0xf 0x1 0x0 0x0 0x8")
+```
+$ cat examples/foo.asm
+; calculate 4 + 4
+START LDI   0x4
+      ADDI  0x4
+      ST    0xfff
+DONE  JMP   DONE
 
-# run the above program
-c.run
+$ ruby bin/assemble.rb examples/foo.asm examples/foo.bin
+Assembling program........complete!
+0x5 0x4 0xd 0x4 0x6 0xf 0xf 0xf 0x1 0x0 0x0 0x8
+
+$ ruby bin/run.rb examples/foo.bin
+Running...
+0x000 - LDI  - |########|
+0x002 - ADDI - |########|
+0x004 - ST   - |########|
+0x008 - JMP  - |########|
+...
 ```
