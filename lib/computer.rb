@@ -39,7 +39,7 @@ class Computer
 
     while true do
       clock!
-      sleep 1.0 / 8
+      sleep 1.0 / 8 / 2 # two operations per second
     end
   end
 
