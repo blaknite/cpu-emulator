@@ -1,5 +1,20 @@
 class Assembler
-  OPCODE_MAP = %w(NOP JMP JC JZ LD LDI ST STC IN OUT NOR NORI ADD ADDI CMP CMPI)
+  OPCODES = %w(NOP JMP JC JZ LD LDI ST STC IN OUT NOR NORI ADD ADDI CMP CMPI)
+
+  TERMINALS = {
+    /^;.*/ => 'COMMENT',
+    /^(#{OPCODES.join('|')})\b/i => 'OPCODE',
+    /^[A-Z]\w*\b/i => 'IDENTIFIER',
+    /^0x[0-9A-F]+\b/i => 'VALUE',
+    /^=/i => 'ASSIGNMENT',
+    /^\s+/i => 'WHITESPACE',
+  }
+
+  LINE = /^([\w=\s]+)?(;.*)?$/i
+  COMMENT = /^COMMENT$/
+  IDENTIFIER = /^IDENTIFIER/
+  IDENTIFIER_ASSIGNMENT = /^IDENTIFIER WHITESPACE ASSIGNMENT WHITESPACE VALUE( WHITESPACE COMMENT)?$/
+  INSTRUCTION = /^OPCODE WHITESPACE (IDENTIFIER|VALUE)( WHITESPACE COMMENT)?$/
 
   def self.assemble_program!(program)
     assembler = self.new(program)
@@ -8,87 +23,120 @@ class Assembler
 
   def initialize(program)
     @program = program
-    @instructions = @program.upcase.lines.map(&:strip)
-    @labels = {}
-    @program_data = []
+    @instructions = @program.lines.map(&:strip)
+    @identifiers = {}
+    @macros = {}
   end
 
   def assemble!
     print 'Assembling program'
 
-    2.times{ assemble }
-    validate_labels
+    begin
+      2.times{ assemble }
 
-    print "complete!\n"
+      print "complete!\n"
 
-    @program_data.map{ |pd| '0x' + pd.to_s(16) }.join(' ')
+      @program_data.map{ |pd| '0x' + pd.to_s(16) }.join(' ')
+    rescue StandardError => e
+      print "failed!\n"
+
+      message = "#{e} at line #{@current_line}."
+
+      print message[0].upcase + message[1..-1]
+    end
   end
 
   private
 
     def assemble
       @program_data = []
-      @instructions.each do |i|
-        assemble_instruction(i)
-        print '.'
-      end
-    end
 
-    def validate_labels
-      @instructions.each do |i|
-        validate_label(i)
+      @instructions.each_with_index do |instruction, index|
+        @current_line = index + 1
+        @program_data += assemble_instruction(instruction)
         print '.'
       end
     end
 
     def assemble_instruction(instruction)
-      instruction = instruction.split(';')[0]
+      fail 'invalid character' unless instruction =~ LINE
 
-      return if instruction.nil? || instruction.empty?
+      tokens = find_tokens(instruction)
 
-      parts = instruction.split(' ')
+      return [] if token_string(tokens) =~ COMMENT
 
-      fail 'invalid instruction' unless OPCODE_MAP.include?(parts[0]) || OPCODE_MAP.include?(parts[1])
-
-      unless OPCODE_MAP.include?(parts[0])
-        @labels[parts[0]] = @program_data.length
-        parts.shift
+      if token_string(tokens) =~ IDENTIFIER_ASSIGNMENT
+        define_identifier(tokens)
+        return []
+      elsif token_string(tokens) =~ IDENTIFIER
+        define_identifier(tokens)
+        tokens.shift
       end
 
-      @program_data << OPCODE_MAP.index(parts[0])
+      assemble_microcode(tokens)
+    end
 
-      if %w(JMP JC JZ).include?(parts[0])
-        operand = parts[1] =~ /^(0x)?\d+$/ ? parts[1].to_i(16) : @labels[parts[1]] || 0x000
+    def assemble_microcode(tokens)
+      return [] if tokens.empty?
 
-        @program_data << ((operand & 0xf00) >> 0x8)
-        @program_data << ((operand & 0x0f0) >> 0x4)
-        @program_data << (operand & 0x00f)
-      elsif %w(LD ST NOR ADD CMP).include?(parts[0])
-        operand = parts[1].to_i(16)
+      fail 'invalid instruction' unless token_string(tokens) =~ INSTRUCTION
 
-        @program_data << ((operand & 0xf00) >> 0x8)
-        @program_data << ((operand & 0x0f0) >> 0x4)
-        @program_data << (operand & 0x00f)
-      elsif %w(LDI STC IN OUT NORI ADDI CMPI).include?(parts[0])
-        operand = parts[1].to_i(16)
+      instruction_data = []
+      instruction_data << get_opcode(tokens[0][:value])
 
-        @program_data << (operand.to_i & 0x00f)
+      operand = tokens[2][:type] == 'VALUE' ? tokens[2][:value].to_i(16) : get_identifier(tokens[2][:value])
+
+      if %w(JMP JC JZ LD ST NOR ADD CMP).include?(tokens[0][:value])
+        instruction_data << ((operand & 0xf00) >> 0x8)
+        instruction_data << ((operand & 0x0f0) >> 0x4)
+        instruction_data << (operand & 0x00f)
+      elsif %w(LDI STC IN OUT NORI ADDI CMPI).include?(tokens[0][:value])
+        instruction_data << (operand & 0x00f)
+      end
+
+      instruction_data
+    end
+
+    def get_opcode(mnemonic)
+      OPCODES.index(mnemonic.upcase)
+    end
+
+    def define_identifier(tokens)
+      fail 'invalid identifier' unless token_string(tokens) =~ IDENTIFIER
+
+      if token_string(tokens) =~ IDENTIFIER_ASSIGNMENT
+        @identifiers[tokens[0][:value]] = tokens[4][:value].to_i(16)
+      else
+        @identifiers[tokens[0][:value]] = @program_data.length
       end
     end
 
-    def validate_label(instruction)
-      instruction = instruction.split(';')[0]
+    def get_identifier(name)
+      fail 'undefined identifier' unless @instructions.any?{ |i| i =~ /^#{name}/i }
 
-      return if instruction.nil? || instruction.empty?
+      @identifiers[name.upcase] || 0x000
+    end
 
-      parts = instruction.split(' ')
+    def find_tokens(instruction)
+      instruction = instruction.dup
+      tokens = []
 
-      parts.shift unless OPCODE_MAP.include?(parts[0])
+      while instruction.length > 0 do
+        TERMINALS.each do |regex, type|
+          matches = instruction.scan(regex).flatten.compact
 
-      if %w(JMP JC JZ).include?(parts[0])
-        unless parts[1] =~ /^(0x)?\d+$/
-          fail 'invalid label' if @labels[parts[1]].nil?
+          next if matches.empty?
+
+          tokens << { type: type, value: matches.first }
+
+          instruction.sub!(regex, '')
         end
       end
+
+      tokens
+    end
+
+    def token_string(tokens)
+      tokens.map{ |t| t[:type] }.join(' ')
     end
 end
