@@ -70,7 +70,7 @@ class Assembler
         return []
       elsif token_string(tokens) =~ IDENTIFIER
         define_identifier(tokens)
-        tokens.shift
+        tokens.shift(2)
       end
 
       assemble_microcode(tokens)
