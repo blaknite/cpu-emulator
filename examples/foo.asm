@@ -1,9 +1,9 @@
 ; calculate 4 + 4
 
-START
-      A = 0x4
-      B = 0x8
+A = 0x4
+B = 0x8
 
+START
       LDI   A
       ADDI  B
       ST    0xfff

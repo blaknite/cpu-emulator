@@ -1,65 +1,73 @@
 ; perform all logic operations
-START   LDI   0x0
-        ST    0xff0
+
+A = 0xff0
+B = 0xff1
+TEMP = 0xff2
+
+START
+        LDI   0x0
+        ST    A
         LDI   0x6
-        ST    0xff1
+        ST    B
         JMP   NOT     ; change this to perform a different operation
-RETURN  ST    0xfff
-DONE    JMP   DONE
+
+STORE  ST    0xfff
+
+DONE   JMP   DONE
 
 ; perform NOT
-NOT     LD    0xff0
+NOT     LD    A
         NORI  0x0     ; NOR with zero is same as NOT
-        JMP   RETURN
+        JMP   STORE
 
 ; perform AND
-AND     LD    0xff0
+AND     LD    A
         NORI  0x0     ; NOT of first value
-        ST    0xff0
-        LD    0xff1
+        ST    A
+        LD    B
         NORI  0x0     ; NOT of second value
-        NOR   0xff0   ; NOR of results
-        JMP   RETURN
+        NOR   A       ; NOR of results
+        JMP   STORE
 
 ; perform NAND
-NAND    LD    0xff0
+NAND    LD    A
         NORI  0x0     ; NOT of first value
-        ST    0xff0
-        LD    0xff1
+        ST    A
+        LD    B
         NORI  0x0     ; NOT of second value
-        NOR   0xff0   ; NOR of results
+        NOR   A       ; NOR of results
         NORI  0x0     ; NOT of result
-        JMP   RETURN
+        JMP   STORE
 
 ; perform OR
-OR      LD    0xff0
-        NOR   0xff1   ; NOR of values
+OR      LD    A
+        NOR   B       ; NOR of values
         NORI  0x0     ; NOT of result
-        JMP   RETURN
+        JMP   STORE
 
 ; perform XOR
-XOR     LD    0xff0
+XOR     LD    A
         NORI  0x0     ; NOT of first value
-        ST    0xff2
-        LD    0xff1
+        ST    TEMP
+        LD    B
         NORI  0x0     ; NOT of second value
-        NOR   0xff2   ; NOR of results
-        ST    0xff2
-        LD    0xff0
-        NOR   0xff1   ; NOR of original values
-        NOR   0xff2   ; NOR of results
-        JMP   RETURN
+        NOR   TEMP    ; NOR of results
+        ST    TEMP
+        LD    A
+        NOR   B       ; NOR of original values
+        NOR   TEMP    ; NOR of results
+        JMP   STORE
 
 ; perform XNOR
-XNOR    LD    0xff0
+XNOR    LD    A
         NORI  0x0     ; NOT of first value
-        ST    0xff2
-        LD    0xff1
+        ST    TEMP
+        LD    B
         NORI  0x0     ; NOT of second value
-        NOR   0xff2   ; NOR of results
-        ST    0xff2
-        LD    0xff0
-        NOR   0xff1   ; NOR of original values
-        NOR   0xff2   ; NOR of results
+        NOR   TEMP    ; NOR of results
+        ST    TEMP
+        LD    A
+        NOR   B       ; NOR of original values
+        NOR   TEMP    ; NOR of results
         NORI  0x0     ; NOT of result
-        JMP   RETURN
+        JMP   STORE
