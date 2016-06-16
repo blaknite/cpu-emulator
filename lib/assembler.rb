@@ -73,12 +73,12 @@ class Assembler
         tokens.shift(2)
       end
 
+      return [] if tokens.empty?
+
       assemble_microcode(tokens)
     end
 
     def assemble_microcode(tokens)
-      return [] if tokens.empty?
-
       fail 'invalid instruction' unless token_string(tokens) =~ INSTRUCTION
 
       instruction_data = []
