@@ -63,15 +63,11 @@ class Assembler
 
       tokens = find_tokens(instruction)
 
-      return [] if token_string(tokens) =~ COMMENT
+      return [] if build_phrase(tokens) =~ COMMENT
 
-      if token_string(tokens) =~ IDENTIFIER_ASSIGNMENT
-        define_identifier(tokens)
-        return []
-      elsif token_string(tokens) =~ IDENTIFIER
-        define_identifier(tokens)
-        tokens.shift(2)
-      end
+      define_identifier(tokens) if build_phrase(tokens) =~ IDENTIFIER
+
+      tokens.shift until tokens.empty? || tokens[0][:type] == 'OPCODE'
 
       return [] if tokens.empty?
 
@@ -79,10 +75,9 @@ class Assembler
     end
 
     def assemble_microcode(tokens)
-      fail 'invalid instruction' unless token_string(tokens) =~ INSTRUCTION
+      fail 'invalid instruction' unless build_phrase(tokens) =~ INSTRUCTION
 
-      instruction_data = []
-      instruction_data << get_opcode(tokens[0][:value])
+      instruction_data = [get_opcode(tokens[0][:value])]
 
       operand = tokens[2][:type] == 'VALUE' ? tokens[2][:value].to_i(16) : get_identifier(tokens[2][:value])
 
@@ -102,9 +97,9 @@ class Assembler
     end
 
     def define_identifier(tokens)
-      fail 'invalid identifier' unless token_string(tokens) =~ IDENTIFIER
+      fail 'invalid identifier' unless build_phrase(tokens) =~ IDENTIFIER
 
-      if token_string(tokens) =~ IDENTIFIER_ASSIGNMENT
+      if build_phrase(tokens) =~ IDENTIFIER_ASSIGNMENT
         @identifiers[tokens[0][:value]] = tokens[4][:value].to_i(16)
       else
         @identifiers[tokens[0][:value]] = @program_data.length
@@ -138,7 +133,7 @@ class Assembler
       tokens
     end
 
-    def token_string(tokens)
+    def build_phrase(tokens)
       tokens.map{ |t| t[:type] }.join(' ')
     end
 end

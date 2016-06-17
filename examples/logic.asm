@@ -4,8 +4,7 @@ A = 0xff0
 B = 0xff1
 TEMP = 0xff2
 
-START
-        LDI   0x0
+START   LDI   0x0
         ST    A
         LDI   0x6
         ST    B

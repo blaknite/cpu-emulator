@@ -4,8 +4,7 @@ A = 0xff0
 B = 0xff0
 RESULT = 0xfff
 
-START
-        LDI   0x6
+START   LDI   0x6
         ST    A
         LDI   0x2
         ST    B
