@@ -130,6 +130,8 @@ class Assembler
           tokens << { type: type, value: matches.first }
 
           instruction.sub!(regex, '')
+
+          break
         end
       end
 
