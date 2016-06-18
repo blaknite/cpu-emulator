@@ -11,6 +11,10 @@ RSpec.describe Computer do
       expect(computer.a).to be_a(Register)
       expect(computer.a.bits).to eq(4)
 
+      # a 4-bit buffer is required to perform operations on the accumulator
+      expect(computer.b).to be_a(Register)
+      expect(computer.b.bits).to eq(4)
+
       # the carry flag must be a 1-bit register
       expect(computer.c).to be_a(Register)
       expect(computer.c.bits).to eq(1)
@@ -22,6 +26,10 @@ RSpec.describe Computer do
         expect(r).to be_a(Register)
         expect(computer.a.bits).to eq(4)
       end
+
+      # the instruction counter must be a 3-bit register
+      expect(computer.ic).to be_a(Register)
+      expect(computer.ic.bits).to eq(3)
 
       # the output must be an array of 16 4-bit registers
       expect(computer.out).to be_a(Array)

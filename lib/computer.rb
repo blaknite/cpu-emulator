@@ -2,10 +2,12 @@ require 'operation'
 require 'register'
 
 class Computer
-  attr_reader :accumulator, :carry, :input, :output, :operation, :program_counter, :ram, :zero
+  attr_reader :accumulator, :buffer, :carry, :input, :instruction_counter, :output, :operation, :program_counter, :ram, :zero
 
   alias_method :a, :accumulator
+  alias_method :b, :buffer
   alias_method :c, :carry
+  alias_method :ic, :instruction_counter
   alias_method :in, :input
   alias_method :out, :output
   alias_method :op, :operation
@@ -14,17 +16,15 @@ class Computer
 
   def initialize
     @accumulator = Register.new(4)
+    @buffer = Register.new(4)
     @carry = Register.new(1)
-    @input = []
-    @output = []
-    16.times do
-      @input << Register.new(4)
-      @output << Register.new(4)
-    end
+    @input = Array.new(16){ Register.new(4) }
+    @instruction_counter = Register.new(3)
+    @output = Array.new(16){ Register.new(4) }
     @program_counter = Register.new(12)
-    @ram = []
-    4096.times{ @ram << Register.new(4) }
+    @ram = Array.new(4096){ Register.new(4) }
     @zero = Register.new(1)
+    @operations = Array.new(16){ |i| Operation.from_opcode(i, self) }
     @operation = nil
   end
 
@@ -44,8 +44,8 @@ class Computer
   end
 
   def clock!
-    if op.nil? || op.complete?
-      @operation = Operation.from_opcode(ram[pc.value].value, self)
+    if op.nil? || ic.value == 0x0
+      @operation = @operations[ram[pc.value].value]
 
       print "\n#{pc.to_hex} - #{op.name.ljust(4)} - |"
     end
@@ -53,7 +53,7 @@ class Computer
     op.clock!
 
     print '#'
-    print "|" if op.complete?
+    print "|" if ic.value == 0x0
 
     nil
   end
