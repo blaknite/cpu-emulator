@@ -1,5 +1,5 @@
 class Assembler
-  OPCODES = %w(NOP JMP JC JZ LD LDI ST STC IN OUT NOR NORI ADD ADDI CMP CMPI)
+  OPCODES = %w(NOP JMP JC JZ LD LDI LDM ST STC STM NOR NORI ADD ADDI CMP CMPI)
 
   TERMINALS = {
     /^;.*/ => 'COMMENT',
@@ -81,11 +81,11 @@ class Assembler
 
       operand = tokens[2][:type] == 'VALUE' ? tokens[2][:value].to_i(16) : get_identifier(tokens[2][:value])
 
-      if %w(JMP JC JZ LD ST NOR ADD CMP).include?(tokens[0][:value])
+      if %w(JMP JC JZ LDM STM).include?(tokens[0][:value])
         instruction_data << ((operand & 0xf00) >> 0x8)
         instruction_data << ((operand & 0x0f0) >> 0x4)
         instruction_data << (operand & 0x00f)
-      elsif %w(LDI STC IN OUT NORI ADDI CMPI).include?(tokens[0][:value])
+      elsif %w(LD LDI ST STC NOR NORI ADD ADDI CMP CMPI).include?(tokens[0][:value])
         instruction_data << (operand & 0x00f)
       end
 

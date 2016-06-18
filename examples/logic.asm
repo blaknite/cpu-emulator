@@ -1,18 +1,18 @@
 ; perform all logic operations
 
-A = 0xff0
-B = 0xff1
-TEMP = 0xff2
+A = 0x0
+B = 0x1
+TEMP = 0xf
 
 START   LDI   0x0
         ST    A
         LDI   0x6
         ST    B
-        JMP   NOT     ; change this to perform a different operation
+        JMP   XNOR    ; change this to perform a different operation
 
-STORE  ST    0xfff
+STORE   STM   0xfff
 
-DONE   JMP   DONE
+DONE    JMP   DONE
 
 ; perform NOT
 NOT     LD    A
@@ -24,13 +24,13 @@ AND     LD    A
         NORI  0x0     ; NOT of first value
         ST    A
         LD    B
-        NORI  0x0     ; NOT of second value
+        NORI  0x0    ; NOT of second value
         NOR   A       ; NOR of results
         JMP   STORE
 
 ; perform NAND
 NAND    LD    A
-        NORI  0x0     ; NOT of first value
+        NORI  0x0    ; NOT of first value
         ST    A
         LD    B
         NORI  0x0     ; NOT of second value

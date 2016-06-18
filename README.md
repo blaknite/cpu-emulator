@@ -9,12 +9,12 @@ No doubt I'll find ways it doesn't work and the design will change.
 0001 : JMP  : Jump to program address unconditionally.
 0010 : JC   : Jump to program address if carry.
 0011 : JZ   : Jump to program address if zero.
-0100 : LD   : Load register to accumulator.
+0100 : LDM  : Load memory to accumulator.
 0101 : LDI  : Load immediate value to accumulator.
-0110 : ST   : Store accumulator in register.
-0111 : STC  : Set carry in to immediate value.
-1000 : IN   : Load a value from the input bus.
-1001 : OUT  : Send a value on the output bus.
+0110 : LDR  : Load register to accumulator.
+0111 : STM  : Store accumulator in memory.
+1000 : STC  : Set carry in to immediate value.
+1001 : STR  : Store accumulator in register
 1010 : NOR  : Logical NOR of register and accumulator.
 1011 : NORI : Logical NOR of immediate value and accumulator.
 1100 : ADD  : Add register to accumulator.
@@ -32,7 +32,7 @@ $ cat examples/foo.asm
 ; calculate 4 + 4
 START LDI   0x4
       ADDI  0x4
-      ST    0xfff
+      STM   0xfff
 DONE  JMP   DONE
 
 $ ruby bin/assemble.rb examples/foo.asm examples/foo.bin
@@ -43,7 +43,7 @@ $ ruby bin/run.rb examples/foo.bin
 Running...
 0x000 - LDI  - |########|
 0x002 - ADDI - |########|
-0x004 - ST   - |########|
+0x004 - STM  - |########|
 0x008 - JMP  - |########|
 ...
 ```

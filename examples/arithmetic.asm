@@ -1,14 +1,16 @@
 ; perform all arithmetic operations
 
-A = 0xff0
-B = 0xff0
-RESULT = 0xfff
+A = 0x0
+B = 0x1
+TEMP = 0xf
 
 START   LDI   0x6
         ST    A
         LDI   0x2
         ST    B
         JMP   MUL     ; change this to perform a different operation
+
+STORE   STM   0xfff   ; store result
 
 DONE    JMP   DONE
 
@@ -20,20 +22,19 @@ SUB     LDI   0x0
         ADDI  0x1
         STC   0x0
         ADD   A       ; add A to B
-        ST    RESULT  ; store result
-        JMP   DONE
+        JMP   STORE
 
 ; perform multiplication
 MUL     LDI   0x0
         STC   0x0
-        ST    RESULT
-MUL2    LD    RESULT  ; load result
+        ST    TEMP
+MUL2    LD    TEMP    ; load result
         STC   0x0
         ADD   A       ; add A to result
-        ST    RESULT  ; store result
-        LD    B       ; load B value
+        ST    TEMP    ; store result
+        LD    B       ; load B
         STC   0x0
         ADDI  0xf     ; subtract 1 from B
-        JZ    DONE    ; we're done if B == 0
+        JZ    STORE   ; we're done if B == 0
         ST    B       ; store B
         JMP   MUL2    ; loop
