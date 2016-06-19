@@ -21,7 +21,11 @@ RSpec.describe Computer do
 
       # the instruction counter must be a 3-bit register
       expect(computer.ic).to be_a(Register)
-      expect(computer.ic.bits).to eq(4)
+      expect(computer.ic.bits).to eq(5)
+
+      # the instruction register must be a 16-bit register
+      expect(computer.i).to be_a(Register)
+      expect(computer.i.bits).to eq(16)
 
       # the program counter must be a 12-bit regisiter so we can store memory addresses
       expect(computer.pc).to be_a(Register)

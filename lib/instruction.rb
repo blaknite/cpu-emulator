@@ -24,8 +24,12 @@ class Instruction::NOP < Instruction
  def initialize(computer)
    super(computer)
 
-   @steps << -> { @opcode = @computer.ram[@computer.pc.value].value }
-   @steps << -> { @computer.pc.value += 1 }
+   @steps << -> { @computer.bus.value = @computer.ram[@computer.pc.value].value }
+   @steps << -> { @computer.i.value = @computer.bus.value << 0x12 }
+   @steps << -> {
+     @computer.bus.value = 0
+     @computer.pc.value += 1
+   }
  end
 end
 
@@ -33,14 +37,30 @@ class Instruction::JMP < Instruction
   def initialize(computer)
     super(computer)
 
-    @steps << -> { @opcode = @computer.ram[@computer.pc.value].value }
-    @steps << -> { @computer.pc.value += 1 }
-    @steps << -> { @operand = @computer.ram[@computer.pc.value].value << 0x8 }
-    @steps << -> { @computer.pc.value += 1 }
-    @steps << -> { @operand += @computer.ram[@computer.pc.value].value << 0x4 }
-    @steps << -> { @computer.pc.value += 1 }
-    @steps << -> { @operand += @computer.ram[@computer.pc.value].value }
-    @steps << -> { @computer.pc.value = @operand }
+    @steps << -> { @computer.bus.value = @computer.ram[@computer.pc.value].value }
+    @steps << -> { @computer.i.value = @computer.bus.value << 0x12 }
+    @steps << -> {
+      @computer.bus.value = 0
+      @computer.pc.value += 1
+    }
+    @steps << -> { @computer.bus.value = @computer.ram[@computer.pc.value].value }
+    @steps << -> { @computer.i.value += @computer.bus.value << 0x8 }
+    @steps << -> {
+     @computer.bus.value = 0
+     @computer.pc.value += 1
+    }
+    @steps << -> { @computer.bus.value = @computer.ram[@computer.pc.value].value }
+    @steps << -> { @computer.i.value += @computer.bus.value << 0x4 }
+    @steps << -> {
+      @computer.bus.value = 0
+      @computer.pc.value += 1
+    }
+    @steps << -> { @computer.bus.value = @computer.ram[@computer.pc.value].value }
+    @steps << -> { @computer.i.value += @computer.bus.value }
+    @steps << -> {
+      @computer.bus.value = 0
+      @computer.pc.value = @computer.i.value & 0xfff
+    }
   end
 end
 
@@ -48,14 +68,30 @@ class Instruction::JC < Instruction
   def initialize(computer)
     super(computer)
 
-    @steps << -> { @opcode = @computer.ram[@computer.pc.value].value }
-    @steps << -> { @computer.pc.value += 1 }
-    @steps << -> { @operand = @computer.ram[@computer.pc.value].value << 0x8 }
-    @steps << -> { @computer.pc.value += 1 }
-    @steps << -> { @operand += @computer.ram[@computer.pc.value].value << 0x4 }
-    @steps << -> { @computer.pc.value += 1 }
-    @steps << -> { @operand += @computer.ram[@computer.pc.value].value }
-    @steps << -> { @computer.c.value == 1 ? @computer.pc.value = @operand : @computer.pc.value += 1 }
+    @steps << -> { @computer.bus.value = @computer.ram[@computer.pc.value].value }
+    @steps << -> { @computer.i.value = @computer.bus.value << 0x12 }
+    @steps << -> {
+      @computer.bus.value = 0
+      @computer.pc.value += 1
+    }
+    @steps << -> { @computer.bus.value = @computer.ram[@computer.pc.value].value }
+    @steps << -> { @computer.i.value += @computer.bus.value << 0x8 }
+    @steps << -> {
+     @computer.bus.value = 0
+     @computer.pc.value += 1
+    }
+    @steps << -> { @computer.bus.value = @computer.ram[@computer.pc.value].value }
+    @steps << -> { @computer.i.value += @computer.bus.value << 0x4 }
+    @steps << -> {
+      @computer.bus.value = 0
+      @computer.pc.value += 1
+    }
+    @steps << -> { @computer.bus.value = @computer.ram[@computer.pc.value].value }
+    @steps << -> { @computer.i.value += @computer.bus.value }
+    @steps << -> {
+      @computer.bus.value = 0
+      @computer.c.value == 1 ? @computer.pc.value = @computer.i.value & 0xfff : @computer.pc.value += 1
+    }
   end
 end
 
@@ -63,14 +99,30 @@ class Instruction::JZ < Instruction
   def initialize(computer)
     super(computer)
 
-    @steps << -> { @opcode = @computer.ram[@computer.pc.value].value }
-    @steps << -> { @computer.pc.value += 1 }
-    @steps << -> { @operand = @computer.ram[@computer.pc.value].value << 0x8 }
-    @steps << -> { @computer.pc.value += 1 }
-    @steps << -> { @operand += @computer.ram[@computer.pc.value].value << 0x4 }
-    @steps << -> { @computer.pc.value += 1 }
-    @steps << -> { @operand += @computer.ram[@computer.pc.value].value }
-    @steps << -> { @computer.z.value == 1 ? @computer.pc.value = @operand : @computer.pc.value += 1 }
+    @steps << -> { @computer.bus.value = @computer.ram[@computer.pc.value].value }
+    @steps << -> { @computer.i.value = @computer.bus.value << 0x12 }
+    @steps << -> {
+      @computer.bus.value = 0
+      @computer.pc.value += 1
+    }
+    @steps << -> { @computer.bus.value = @computer.ram[@computer.pc.value].value }
+    @steps << -> { @computer.i.value += @computer.bus.value << 0x8 }
+    @steps << -> {
+     @computer.bus.value = 0
+     @computer.pc.value += 1
+    }
+    @steps << -> { @computer.bus.value = @computer.ram[@computer.pc.value].value }
+    @steps << -> { @computer.i.value += @computer.bus.value << 0x4 }
+    @steps << -> {
+      @computer.bus.value = 0
+      @computer.pc.value += 1
+    }
+    @steps << -> { @computer.bus.value = @computer.ram[@computer.pc.value].value }
+    @steps << -> { @computer.i.value += @computer.bus.value }
+    @steps << -> {
+      @computer.bus.value = 0
+      @computer.z.value == 1 ? @computer.pc.value = @computer.i.value & 0xfff : @computer.pc.value += 1
+    }
   end
 end
 
@@ -78,12 +130,21 @@ class Instruction::LD < Instruction
   def initialize(computer)
     super(computer)
 
-    @steps << -> { @opcode = @computer.ram[@computer.pc.value].value }
-    @steps << -> { @computer.pc.value += 1 }
-    @steps << -> { @computer.bus.value = @computer.r[@computer.ram[@computer.pc.value].value].value }
+    @steps << -> { @computer.bus.value = @computer.ram[@computer.pc.value].value }
+    @steps << -> { @computer.i.value = @computer.bus.value << 0x12 }
+    @steps << -> {
+      @computer.bus.value = 0
+      @computer.pc.value += 1
+    }
+    @steps << -> { @computer.bus.value = @computer.ram[@computer.pc.value].value }
+    @steps << -> { @computer.i.value += @computer.bus.value }
+    @steps << -> {
+      @computer.bus.value = 0
+      @computer.pc.value += 1
+    }
+    @steps << -> { @computer.bus.value = @computer.r[@computer.i.value & 0xf].value }
     @steps << -> { @computer.a.value = @computer.bus.value }
     @steps << -> { @computer.bus.value = 0 }
-    @steps << -> { @computer.pc.value += 1 }
   end
 end
 
@@ -91,12 +152,21 @@ class Instruction::LDI < Instruction
   def initialize(computer)
     super(computer)
 
-    @steps << -> { @opcode = @computer.ram[@computer.pc.value].value }
-    @steps << -> { @computer.pc.value += 1 }
     @steps << -> { @computer.bus.value = @computer.ram[@computer.pc.value].value }
+    @steps << -> { @computer.i.value = @computer.bus.value << 0x12 }
+    @steps << -> {
+      @computer.bus.value = 0
+      @computer.pc.value += 1
+    }
+    @steps << -> { @computer.bus.value = @computer.ram[@computer.pc.value].value }
+    @steps << -> { @computer.i.value += @computer.bus.value }
+    @steps << -> {
+      @computer.bus.value = 0
+      @computer.pc.value += 1
+    }
+    @steps << -> { @computer.bus.value = @computer.i.value & 0xf }
     @steps << -> { @computer.a.value = @computer.bus.value }
     @steps << -> { @computer.bus.value = 0 }
-    @steps << -> { @computer.pc.value += 1 }
   end
 end
 
@@ -104,19 +174,33 @@ class Instruction::LDM < Instruction
   def initialize(computer)
     super(computer)
 
-    @steps << -> { @opcode = @computer.ram[@computer.pc.value].value }
-    @steps << -> { @computer.pc.value += 1 }
-    @steps << -> { @operand = @computer.ram[@computer.pc.value].value << 0x8 }
-    @steps << -> { @computer.pc.value += 1 }
-    @steps << -> { @operand += @computer.ram[@computer.pc.value].value << 0x4 }
-    @steps << -> { @computer.pc.value += 1 }
-    @steps << -> { @operand += @computer.ram[@computer.pc.value].value }
-    @steps << -> { @computer.bus.value = @computer.ram[@operand].value }
-    @steps << -> { @computer.a.value = @computer.bus.value }
+    @steps << -> { @computer.bus.value = @computer.ram[@computer.pc.value].value }
+    @steps << -> { @computer.i.value = @computer.bus.value << 0x12 }
     @steps << -> {
       @computer.bus.value = 0
       @computer.pc.value += 1
     }
+    @steps << -> { @computer.bus.value = @computer.ram[@computer.pc.value].value }
+    @steps << -> { @computer.i.value += @computer.bus.value << 0x8 }
+    @steps << -> {
+     @computer.bus.value = 0
+     @computer.pc.value += 1
+    }
+    @steps << -> { @computer.bus.value = @computer.ram[@computer.pc.value].value }
+    @steps << -> { @computer.i.value += @computer.bus.value << 0x4 }
+    @steps << -> {
+      @computer.bus.value = 0
+      @computer.pc.value += 1
+    }
+    @steps << -> { @computer.bus.value = @computer.ram[@computer.pc.value].value }
+    @steps << -> { @computer.i.value += @computer.bus.value }
+    @steps << -> {
+      @computer.bus.value = 0
+      @computer.pc.value += 1
+    }
+    @steps << -> { @computer.bus.value = @computer.ram[@computer.i.value & 0xfff].value }
+    @steps << -> { @computer.a.value = @computer.bus.value }
+    @steps << -> { @computer.bus.value = 0 }
   end
 end
 
@@ -124,12 +208,21 @@ class Instruction::ST < Instruction
   def initialize(computer)
     super(computer)
 
-    @steps << -> { @opcode = @computer.ram[@computer.pc.value].value }
-    @steps << -> { @computer.pc.value += 1 }
+    @steps << -> { @computer.bus.value = @computer.ram[@computer.pc.value].value }
+    @steps << -> { @computer.i.value = @computer.bus.value << 0x12 }
+    @steps << -> {
+      @computer.bus.value = 0
+      @computer.pc.value += 1
+    }
+    @steps << -> { @computer.bus.value = @computer.ram[@computer.pc.value].value }
+    @steps << -> { @computer.i.value += @computer.bus.value }
+    @steps << -> {
+      @computer.bus.value = 0
+      @computer.pc.value += 1
+    }
     @steps << -> { @computer.bus.value = @computer.a.value }
-    @steps << -> { @computer.r[@computer.ram[@computer.pc.value].value].value = @computer.bus.value }
+    @steps << -> { @computer.r[@computer.i.value & 0xf].value = @computer.bus.value }
     @steps << -> { @computer.bus.value = 0 }
-    @steps << -> { @computer.pc.value += 1 }
   end
 end
 
@@ -137,10 +230,21 @@ class Instruction::STC < Instruction
   def initialize(computer)
     super(computer)
 
-    @steps << -> { @opcode = @computer.ram[@computer.pc.value].value }
-    @steps << -> { @computer.pc.value += 1 }
-    @steps << -> { @computer.c.value = @computer.ram[@computer.pc.value].value }
-    @steps << -> { @computer.pc.value += 1 }
+    @steps << -> { @computer.bus.value = @computer.ram[@computer.pc.value].value }
+    @steps << -> { @computer.i.value = @computer.bus.value << 0x12 }
+    @steps << -> {
+      @computer.bus.value = 0
+      @computer.pc.value += 1
+    }
+    @steps << -> { @computer.bus.value = @computer.ram[@computer.pc.value].value }
+    @steps << -> { @computer.i.value += @computer.bus.value }
+    @steps << -> {
+      @computer.bus.value = 0
+      @computer.pc.value += 1
+    }
+    @steps << -> { @computer.bus.value = @computer.i.value & 0xf }
+    @steps << -> { @computer.c.value = @computer.bus.value }
+    @steps << -> { @computer.bus.value = 0 }
   end
 end
 
@@ -148,19 +252,33 @@ class Instruction::STM < Instruction
   def initialize(computer)
     super(computer)
 
-    @steps << -> { @opcode = @computer.ram[@computer.pc.value].value }
-    @steps << -> { @computer.pc.value += 1 }
-    @steps << -> { @operand = @computer.ram[@computer.pc.value].value << 0x8 }
-    @steps << -> { @computer.pc.value += 1 }
-    @steps << -> { @operand += @computer.ram[@computer.pc.value].value << 0x4 }
-    @steps << -> { @computer.pc.value += 1 }
-    @steps << -> { @operand += @computer.ram[@computer.pc.value].value }
-    @steps << -> { @computer.bus.value = @computer.a.value }
-    @steps << -> { @computer.ram[@operand].value = @computer.bus.value }
+    @steps << -> { @computer.bus.value = @computer.ram[@computer.pc.value].value }
+    @steps << -> { @computer.i.value = @computer.bus.value << 0x12 }
     @steps << -> {
       @computer.bus.value = 0
       @computer.pc.value += 1
     }
+    @steps << -> { @computer.bus.value = @computer.ram[@computer.pc.value].value }
+    @steps << -> { @computer.i.value += @computer.bus.value << 0x8 }
+    @steps << -> {
+     @computer.bus.value = 0
+     @computer.pc.value += 1
+    }
+    @steps << -> { @computer.bus.value = @computer.ram[@computer.pc.value].value }
+    @steps << -> { @computer.i.value += @computer.bus.value << 0x4 }
+    @steps << -> {
+      @computer.bus.value = 0
+      @computer.pc.value += 1
+    }
+    @steps << -> { @computer.bus.value = @computer.ram[@computer.pc.value].value }
+    @steps << -> { @computer.i.value += @computer.bus.value }
+    @steps << -> {
+      @computer.bus.value = 0
+      @computer.pc.value += 1
+    }
+    @steps << -> { @computer.bus.value = @computer.a.value }
+    @steps << -> { @computer.ram[@computer.i.value & 0xfff].value = @computer.bus.value }
+    @steps << -> { @computer.bus.value = 0 }
   end
 end
 
@@ -168,9 +286,19 @@ class Instruction::NOR < Instruction
   def initialize(computer)
     super(computer)
 
-    @steps << -> { @opcode = @computer.ram[@computer.pc.value].value }
-    @steps << -> { @computer.pc.value += 1 }
-    @steps << -> { @computer.bus.value = @computer.r[@computer.ram[@computer.pc.value].value].value }
+    @steps << -> { @computer.bus.value = @computer.ram[@computer.pc.value].value }
+    @steps << -> { @computer.i.value = @computer.bus.value << 0x12 }
+    @steps << -> {
+      @computer.bus.value = 0
+      @computer.pc.value += 1
+    }
+    @steps << -> { @computer.bus.value = @computer.ram[@computer.pc.value].value }
+    @steps << -> { @computer.i.value += @computer.bus.value }
+    @steps << -> {
+      @computer.bus.value = 0
+      @computer.pc.value += 1
+    }
+    @steps << -> { @computer.bus.value = @computer.r[@computer.i.value & 0xf].value }
     @steps << -> {
       @computer.ta.value = @computer.a.value
       @computer.tb.value = @computer.bus.value
@@ -180,13 +308,10 @@ class Instruction::NOR < Instruction
       result = ~(@computer.ta.value | @computer.tb.value)
       @computer.bus.value = result
       @computer.c.value = 0
-      @computer.z.value = result & 0x0f == 0 ? 1 : 0
+      @computer.z.value = result & 0xf == 0 ? 1 : 0
     }
     @steps << -> { @computer.a.value = @computer.bus.value }
-    @steps << -> {
-      @computer.bus.value = 0
-      @computer.pc.value += 1
-    }
+    @steps << -> { @computer.bus.value = 0 }
   end
 end
 
@@ -194,9 +319,19 @@ class Instruction::NORI < Instruction
   def initialize(computer)
     super(computer)
 
-    @steps << -> { @opcode = @computer.ram[@computer.pc.value].value }
-    @steps << -> { @computer.pc.value += 1 }
     @steps << -> { @computer.bus.value = @computer.ram[@computer.pc.value].value }
+    @steps << -> { @computer.i.value = @computer.bus.value << 0x12 }
+    @steps << -> {
+      @computer.bus.value = 0
+      @computer.pc.value += 1
+    }
+    @steps << -> { @computer.bus.value = @computer.ram[@computer.pc.value].value }
+    @steps << -> { @computer.i.value += @computer.bus.value }
+    @steps << -> {
+      @computer.bus.value = 0
+      @computer.pc.value += 1
+    }
+    @steps << -> { @computer.bus.value = @computer.i.value & 0xf }
     @steps << -> {
       @computer.ta.value = @computer.a.value
       @computer.tb.value = @computer.bus.value
@@ -206,13 +341,10 @@ class Instruction::NORI < Instruction
       result = ~(@computer.ta.value | @computer.tb.value)
       @computer.bus.value = result
       @computer.c.value = 0
-      @computer.z.value = result & 0x0f == 0 ? 1 : 0
+      @computer.z.value = result & 0xf == 0 ? 1 : 0
     }
     @steps << -> { @computer.a.value = @computer.bus.value }
-    @steps << -> {
-      @computer.bus.value = 0
-      @computer.pc.value += 1
-    }
+    @steps << -> { @computer.bus.value = 0 }
   end
 end
 
@@ -220,14 +352,31 @@ class Instruction::NORM < Instruction
   def initialize(computer)
     super(computer)
 
-    @steps << -> { @opcode = @computer.ram[@computer.pc.value].value }
-    @steps << -> { @computer.pc.value += 1 }
-    @steps << -> { @operand = @computer.ram[@computer.pc.value].value << 0x8 }
-    @steps << -> { @computer.pc.value += 1 }
-    @steps << -> { @operand += @computer.ram[@computer.pc.value].value << 0x4 }
-    @steps << -> { @computer.pc.value += 1 }
-    @steps << -> { @operand += @computer.ram[@computer.pc.value].value }
-    @steps << -> { @computer.bus.value = @computer.ram[@operand].value }
+    @steps << -> { @computer.bus.value = @computer.ram[@computer.pc.value].value }
+    @steps << -> { @computer.i.value = @computer.bus.value << 0x12 }
+    @steps << -> {
+      @computer.bus.value = 0
+      @computer.pc.value += 1
+    }
+    @steps << -> { @computer.bus.value = @computer.ram[@computer.pc.value].value }
+    @steps << -> { @computer.i.value += @computer.bus.value << 0x8 }
+    @steps << -> {
+     @computer.bus.value = 0
+     @computer.pc.value += 1
+    }
+    @steps << -> { @computer.bus.value = @computer.ram[@computer.pc.value].value }
+    @steps << -> { @computer.i.value += @computer.bus.value << 0x4 }
+    @steps << -> {
+      @computer.bus.value = 0
+      @computer.pc.value += 1
+    }
+    @steps << -> { @computer.bus.value = @computer.ram[@computer.pc.value].value }
+    @steps << -> { @computer.i.value += @computer.bus.value }
+    @steps << -> {
+      @computer.bus.value = 0
+      @computer.pc.value += 1
+    }
+    @steps << -> { @computer.bus.value = @computer.ram[@computer.i.value & 0xfff].value }
     @steps << -> {
       @computer.ta.value = @computer.a.value
       @computer.tb.value = @computer.bus.value
@@ -237,11 +386,10 @@ class Instruction::NORM < Instruction
       result = ~(@computer.ta.value | @computer.tb.value)
       @computer.bus.value = result
       @computer.c.value = 0
-      @computer.z.value = result & 0x0f == 0 ? 1 : 0
+      @computer.z.value = result & 0xf == 0 ? 1 : 0
     }
     @steps << -> { @computer.a.value = @computer.bus.value }
     @steps << -> { @computer.bus.value = 0 }
-    @steps << -> { @computer.pc.value += 1 }
   end
 end
 
@@ -249,9 +397,19 @@ class Instruction::ADD < Instruction
   def initialize(computer)
     super(computer)
 
-    @steps << -> { @opcode = @computer.ram[@computer.pc.value].value }
-    @steps << -> { @computer.pc.value += 1 }
-    @steps << -> { @computer.bus.value = @computer.r[@computer.ram[@computer.pc.value].value].value }
+    @steps << -> { @computer.bus.value = @computer.ram[@computer.pc.value].value }
+    @steps << -> { @computer.i.value = @computer.bus.value << 0x12 }
+    @steps << -> {
+      @computer.bus.value = 0
+      @computer.pc.value += 1
+    }
+    @steps << -> { @computer.bus.value = @computer.ram[@computer.pc.value].value }
+    @steps << -> { @computer.i.value += @computer.bus.value }
+    @steps << -> {
+      @computer.bus.value = 0
+      @computer.pc.value += 1
+    }
+    @steps << -> { @computer.bus.value = @computer.r[@computer.i.value & 0xf].value }
     @steps << -> {
       @computer.ta.value = @computer.a.value
       @computer.tb.value = @computer.bus.value
@@ -261,13 +419,10 @@ class Instruction::ADD < Instruction
       result = @computer.ta.value + @computer.tb.value + @computer.c.value
       @computer.bus.value = result
       @computer.c.value = result[4]
-      @computer.z.value = result & 0x0f == 0 ? 1 : 0
+      @computer.z.value = result & 0xf == 0 ? 1 : 0
     }
     @steps << -> { @computer.a.value = @computer.bus.value }
-    @steps << -> {
-      @computer.bus.value = 0
-      @computer.pc.value += 1
-    }
+    @steps << -> { @computer.bus.value = 0 }
   end
 end
 
@@ -275,9 +430,19 @@ class Instruction::ADDI < Instruction
   def initialize(computer)
     super(computer)
 
-    @steps << -> { @opcode = @computer.ram[@computer.pc.value].value }
-    @steps << -> { @computer.pc.value += 1 }
     @steps << -> { @computer.bus.value = @computer.ram[@computer.pc.value].value }
+    @steps << -> { @computer.i.value = @computer.bus.value << 0x12 }
+    @steps << -> {
+      @computer.bus.value = 0
+      @computer.pc.value += 1
+    }
+    @steps << -> { @computer.bus.value = @computer.ram[@computer.pc.value].value }
+    @steps << -> { @computer.i.value += @computer.bus.value }
+    @steps << -> {
+      @computer.bus.value = 0
+      @computer.pc.value += 1
+    }
+    @steps << -> { @computer.bus.value = @computer.i.value & 0xf }
     @steps << -> {
       @computer.ta.value = @computer.a.value
       @computer.tb.value = @computer.bus.value
@@ -287,13 +452,10 @@ class Instruction::ADDI < Instruction
       result = @computer.ta.value + @computer.tb.value + @computer.c.value
       @computer.bus.value = result
       @computer.c.value = result[4]
-      @computer.z.value = result & 0x0f == 0 ? 1 : 0
+      @computer.z.value = result & 0xf == 0 ? 1 : 0
     }
     @steps << -> { @computer.a.value = @computer.bus.value }
-    @steps << -> {
-      @computer.bus.value = 0
-      @computer.pc.value += 1
-    }
+    @steps << -> { @computer.bus.value = 0 }
   end
 end
 
@@ -301,14 +463,31 @@ class Instruction::ADDM < Instruction
   def initialize(computer)
     super(computer)
 
-    @steps << -> { @opcode = @computer.ram[@computer.pc.value].value }
-    @steps << -> { @computer.pc.value += 1 }
-    @steps << -> { @operand = @computer.ram[@computer.pc.value].value << 0x8 }
-    @steps << -> { @computer.pc.value += 1 }
-    @steps << -> { @operand += @computer.ram[@computer.pc.value].value << 0x4 }
-    @steps << -> { @computer.pc.value += 1 }
-    @steps << -> { @operand += @computer.ram[@computer.pc.value].value }
-    @steps << -> { @computer.bus.value = @computer.ram[@operand].value }
+    @steps << -> { @computer.bus.value = @computer.ram[@computer.pc.value].value }
+    @steps << -> { @computer.i.value = @computer.bus.value << 0x12 }
+    @steps << -> {
+      @computer.bus.value = 0
+      @computer.pc.value += 1
+    }
+    @steps << -> { @computer.bus.value = @computer.ram[@computer.pc.value].value }
+    @steps << -> { @computer.i.value += @computer.bus.value << 0x8 }
+    @steps << -> {
+     @computer.bus.value = 0
+     @computer.pc.value += 1
+    }
+    @steps << -> { @computer.bus.value = @computer.ram[@computer.pc.value].value }
+    @steps << -> { @computer.i.value += @computer.bus.value << 0x4 }
+    @steps << -> {
+      @computer.bus.value = 0
+      @computer.pc.value += 1
+    }
+    @steps << -> { @computer.bus.value = @computer.ram[@computer.pc.value].value }
+    @steps << -> { @computer.i.value += @computer.bus.value }
+    @steps << -> {
+      @computer.bus.value = 0
+      @computer.pc.value += 1
+    }
+    @steps << -> { @computer.bus.value = @computer.ram[@computer.i.value & 0xfff].value }
     @steps << -> {
       @computer.ta.value = @computer.a.value
       @computer.tb.value = @computer.bus.value
@@ -318,11 +497,10 @@ class Instruction::ADDM < Instruction
       result = @computer.ta.value + @computer.tb.value + @computer.c.value
       @computer.bus.value = result
       @computer.c.value = result[4]
-      @computer.z.value = result & 0x0f == 0 ? 1 : 0
+      @computer.z.value = result & 0xf == 0 ? 1 : 0
     }
     @steps << -> { @computer.a.value = @computer.bus.value }
     @steps << -> { @computer.bus.value = 0 }
-    @steps << -> { @computer.pc.value += 1 }
   end
 end
 
@@ -330,9 +508,19 @@ class Instruction::CMP < Instruction
   def initialize(computer)
     super(computer)
 
-    @steps << -> { @opcode = @computer.ram[@computer.pc.value].value }
-    @steps << -> { @computer.pc.value += 1 }
-    @steps << -> { @computer.bus.value = @computer.r[@computer.ram[@computer.pc.value].value].value }
+    @steps << -> { @computer.bus.value = @computer.ram[@computer.pc.value].value }
+    @steps << -> { @computer.i.value = @computer.bus.value << 0x12 }
+    @steps << -> {
+      @computer.bus.value = 0
+      @computer.pc.value += 1
+    }
+    @steps << -> { @computer.bus.value = @computer.ram[@computer.pc.value].value }
+    @steps << -> { @computer.i.value += @computer.bus.value }
+    @steps << -> {
+      @computer.bus.value = 0
+      @computer.pc.value += 1
+    }
+    @steps << -> { @computer.bus.value = @computer.r[@computer.i.value & 0xf].value }
     @steps << -> {
       @computer.ta.value = @computer.a.value
       @computer.tb.value = @computer.bus.value
@@ -340,11 +528,9 @@ class Instruction::CMP < Instruction
     @steps << -> {
       result = @computer.ta.value - @computer.tb.value
       @computer.c.value = result[4]
-      @computer.z.value = result & 0x0f == 0 ? 1 : 0
+      @computer.z.value = result & 0xf == 0 ? 1 : 0
       @computer.bus.value = 0
-      @computer.pc.value += 1
     }
-    @steps << -> { @computer.ic.value = 0 }
   end
 end
 
@@ -352,9 +538,19 @@ class Instruction::CMPI < Instruction
   def initialize(computer)
     super(computer)
 
-    @steps << -> { @opcode = @computer.ram[@computer.pc.value].value }
-    @steps << -> { @computer.pc.value += 1 }
     @steps << -> { @computer.bus.value = @computer.ram[@computer.pc.value].value }
+    @steps << -> { @computer.i.value = @computer.bus.value << 0x12 }
+    @steps << -> {
+      @computer.bus.value = 0
+      @computer.pc.value += 1
+    }
+    @steps << -> { @computer.bus.value = @computer.ram[@computer.pc.value].value }
+    @steps << -> { @computer.i.value += @computer.bus.value }
+    @steps << -> {
+      @computer.bus.value = 0
+      @computer.pc.value += 1
+    }
+    @steps << -> { @computer.bus.value = @computer.i.value & 0xf }
     @steps << -> {
       @computer.ta.value = @computer.a.value
       @computer.tb.value = @computer.bus.value
@@ -362,11 +558,9 @@ class Instruction::CMPI < Instruction
     @steps << -> {
       result = @computer.ta.value - @computer.tb.value
       @computer.c.value = result[4]
-      @computer.z.value = result & 0x0f == 0 ? 1 : 0
+      @computer.z.value = result & 0xf == 0 ? 1 : 0
       @computer.bus.value = 0
-      @computer.pc.value += 1
     }
-    @steps << -> { @computer.ic.value = 0 }
   end
 end
 
@@ -374,14 +568,31 @@ class Instruction::CMPM < Instruction
   def initialize(computer)
     super(computer)
 
-    @steps << -> { @opcode = @computer.ram[@computer.pc.value].value }
-    @steps << -> { @computer.pc.value += 1 }
-    @steps << -> { @operand = @computer.ram[@computer.pc.value].value << 0x8 }
-    @steps << -> { @computer.pc.value += 1 }
-    @steps << -> { @operand += @computer.ram[@computer.pc.value].value << 0x4 }
-    @steps << -> { @computer.pc.value += 1 }
-    @steps << -> { @operand += @computer.ram[@computer.pc.value].value }
-    @steps << -> { @computer.bus.value = @computer.ram[@operand].value }
+    @steps << -> { @computer.bus.value = @computer.ram[@computer.pc.value].value }
+    @steps << -> { @computer.i.value = @computer.bus.value << 0x12 }
+    @steps << -> {
+      @computer.bus.value = 0
+      @computer.pc.value += 1
+    }
+    @steps << -> { @computer.bus.value = @computer.ram[@computer.pc.value].value }
+    @steps << -> { @computer.i.value += @computer.bus.value << 0x8 }
+    @steps << -> {
+     @computer.bus.value = 0
+     @computer.pc.value += 1
+    }
+    @steps << -> { @computer.bus.value = @computer.ram[@computer.pc.value].value }
+    @steps << -> { @computer.i.value += @computer.bus.value << 0x4 }
+    @steps << -> {
+      @computer.bus.value = 0
+      @computer.pc.value += 1
+    }
+    @steps << -> { @computer.bus.value = @computer.ram[@computer.pc.value].value }
+    @steps << -> { @computer.i.value += @computer.bus.value }
+    @steps << -> {
+      @computer.bus.value = 0
+      @computer.pc.value += 1
+    }
+    @steps << -> { @computer.bus.value = @computer.ram[@computer.i.value & 0xfff].value }
     @steps << -> {
       @computer.ta.value = @computer.a.value
       @computer.tb.value = @computer.bus.value
@@ -389,9 +600,8 @@ class Instruction::CMPM < Instruction
     @steps << -> {
       result = @computer.ta.value - @computer.tb.value
       @computer.c.value = result[4]
-      @computer.z.value = result & 0x0f == 0 ? 1 : 0
+      @computer.z.value = result & 0xf == 0 ? 1 : 0
       @computer.bus.value = 0
-      @computer.pc.value += 1
     }
   end
 end

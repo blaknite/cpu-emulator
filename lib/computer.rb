@@ -2,13 +2,12 @@ require 'instruction'
 require 'register'
 
 class Computer
-  attr_reader :accumulator, :bus, :carry, :input, :instruction_counter, :output, :program_counter, :ram, :registers, :temp_a, :temp_b, :zero
+  attr_reader :accumulator, :bus, :carry, :instruction_counter, :instruction_register, :program_counter, :ram, :registers, :temp_a, :temp_b, :zero
 
   alias_method :a, :accumulator
   alias_method :c, :carry
   alias_method :ic, :instruction_counter
-  alias_method :in, :input
-  alias_method :out, :output
+  alias_method :i, :instruction_register
   alias_method :pc, :program_counter
   alias_method :r, :registers
   alias_method :ta, :temp_a
@@ -19,7 +18,8 @@ class Computer
     @accumulator = Register.new(4)
     @bus = Register.new(4)
     @carry = Register.new(1)
-    @instruction_counter = Register.new(4)
+    @instruction_counter = Register.new(5)
+    @instruction_register = Register.new(16)
     @program_counter = Register.new(12)
     @ram = Array.new(4096){ Register.new(4) }
     @registers = Array.new(16){ Register.new(4) }

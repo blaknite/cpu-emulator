@@ -17,7 +17,7 @@ RSpec.describe Instruction::NOP do
     computer = Computer.new
     instruction = Instruction::NOP.new(computer)
 
-    2.times{ instruction.clock! }
+    3.times{ instruction.clock! }
 
     expect(computer.pc.value).to eq(1)
   end
@@ -34,7 +34,7 @@ RSpec.describe Instruction::JMP do
 
     expect(computer.pc.value).to eq(0x0)
 
-    8.times{ instruction.clock! }
+    12.times{ instruction.clock! }
 
     expect(computer.pc.value).to eq(0x04c)
   end
@@ -52,7 +52,7 @@ RSpec.describe Instruction::JC do
 
     expect(computer.pc.value).to eq(0x0)
 
-    8.times{ instruction.clock! }
+    12.times{ instruction.clock! }
 
     expect(computer.pc.value).to eq(0x004)
   end
@@ -68,7 +68,7 @@ RSpec.describe Instruction::JC do
 
     expect(computer.pc.value).to eq(0x0)
 
-    8.times{ instruction.clock! }
+    12.times{ instruction.clock! }
 
     expect(computer.pc.value).to eq(0x04c)
   end
@@ -86,7 +86,7 @@ RSpec.describe Instruction::JZ do
 
     expect(computer.pc.value).to eq(0x0)
 
-    8.times{ instruction.clock! }
+    12.times{ instruction.clock! }
 
     expect(computer.pc.value).to eq(0x004)
   end
@@ -102,7 +102,7 @@ RSpec.describe Instruction::JZ do
 
     expect(computer.pc.value).to eq(0x0)
 
-    8.times{ instruction.clock! }
+    12.times{ instruction.clock! }
 
     expect(computer.pc.value).to eq(0x04c)
   end
@@ -116,7 +116,7 @@ RSpec.describe Instruction::LD do
     computer.r[0x0].value = 0x4
     computer.ram[0x001].value = 0x0
 
-    6.times{ instruction.clock! }
+    9.times{ instruction.clock! }
 
     expect(computer.a.value).to eq(0x4)
   end
@@ -131,7 +131,7 @@ RSpec.describe Instruction::LDI do
 
     expect(computer.a.value).to eq(0x0)
 
-    6.times{ instruction.clock! }
+    9.times{ instruction.clock! }
 
     expect(computer.a.value).to eq(0x4)
   end
@@ -150,7 +150,7 @@ RSpec.describe Instruction::LDM do
 
     expect(computer.a.value).to eq(0x0)
 
-    10.times{ instruction.clock! }
+    15.times{ instruction.clock! }
 
     expect(computer.a.value).to eq(0x4)
   end
@@ -164,7 +164,7 @@ RSpec.describe Instruction::ST do
     computer.a.value = 0x4
     computer.ram[0x001].value = 0x0
 
-    6.times{ instruction.clock! }
+    9.times{ instruction.clock! }
 
     expect(computer.r[0x0].value).to eq(0x4)
   end
@@ -177,7 +177,7 @@ RSpec.describe Instruction::STC do
 
     computer.ram[0x001].value = 1
 
-    4.times{ instruction.clock! }
+    9.times{ instruction.clock! }
 
     expect(computer.c.value).to eq(1)
   end
@@ -189,7 +189,7 @@ RSpec.describe Instruction::STC do
     computer.c.value = 0
     computer.ram[0x001].value = 0
 
-    4.times{ instruction.clock! }
+    9.times{ instruction.clock! }
 
     expect(computer.c.value).to eq(0)
   end
@@ -206,7 +206,7 @@ RSpec.describe Instruction::STM do
 
     computer.a.value = 0x4
 
-    10.times{ instruction.clock! }
+    15.times{ instruction.clock! }
 
     expect(computer.ram[0x04c].value).to eq(0x4)
   end
@@ -220,7 +220,7 @@ RSpec.describe Instruction::NOR do
     computer.a.value = "0000".to_i(2)
     computer.r[0x0].value = "0101".to_i(2)
 
-    8.times{ instruction.clock! }
+    12.times{ instruction.clock! }
 
     expect(computer.a.to_bin).to eq("1010")
   end
@@ -232,7 +232,7 @@ RSpec.describe Instruction::NOR do
     computer.a.value = "1010".to_i(2)
     computer.r[0x0].value = "0101".to_i(2)
 
-    8.times{ instruction.clock! }
+    12.times{ instruction.clock! }
 
     expect(computer.z.value).to eq(1)
   end
@@ -244,7 +244,7 @@ RSpec.describe Instruction::NOR do
     computer.a.value = "0000".to_i(2)
     computer.r[0x0].value = "0101".to_i(2)
 
-    8.times{ instruction.clock! }
+    12.times{ instruction.clock! }
 
     expect(computer.z.value).to eq(0)
   end
@@ -255,7 +255,7 @@ RSpec.describe Instruction::NOR do
 
     computer.c.value = 1
 
-    8.times{ instruction.clock! }
+    12.times{ instruction.clock! }
 
     expect(computer.c.value).to eq(0)
   end
@@ -269,7 +269,7 @@ RSpec.describe Instruction::NORI do
     computer.a.value = "0000".to_i(2)
     computer.ram[0x001].value = "0101".to_i(2)
 
-    8.times{ instruction.clock! }
+    12.times{ instruction.clock! }
 
     expect(computer.a.to_bin).to eq("1010")
   end
@@ -281,7 +281,7 @@ RSpec.describe Instruction::NORI do
     computer.a.value = "1010".to_i(2)
     computer.ram[0x001].value = "0101".to_i(2)
 
-    8.times{ instruction.clock! }
+    12.times{ instruction.clock! }
 
     expect(computer.z.value).to eq(1)
   end
@@ -293,7 +293,7 @@ RSpec.describe Instruction::NORI do
     computer.a.value = "0000".to_i(2)
     computer.ram[0x001].value = "0101".to_i(2)
 
-    8.times{ instruction.clock! }
+    12.times{ instruction.clock! }
 
     expect(computer.z.value).to eq(0)
   end
@@ -304,7 +304,7 @@ RSpec.describe Instruction::NORI do
 
     computer.c.value = 1
 
-    8.times{ instruction.clock! }
+    12.times{ instruction.clock! }
 
     expect(computer.c.value).to eq(0)
   end
@@ -323,7 +323,7 @@ RSpec.describe Instruction::NORM do
 
     computer.ram[0x04c].value = "0101".to_i(2)
 
-    14.times{ instruction.clock! }
+    18.times{ instruction.clock! }
 
     expect(computer.a.to_bin).to eq("1010")
   end
@@ -340,7 +340,7 @@ RSpec.describe Instruction::NORM do
 
     computer.ram[0x04c].value = "0101".to_i(2)
 
-    14.times{ instruction.clock! }
+    18.times{ instruction.clock! }
 
     expect(computer.z.value).to eq(1)
   end
@@ -357,7 +357,7 @@ RSpec.describe Instruction::NORM do
 
     computer.ram[0x04c].value = "0101".to_i(2)
 
-    14.times{ instruction.clock! }
+    18.times{ instruction.clock! }
 
     expect(computer.z.value).to eq(0)
   end
@@ -368,7 +368,7 @@ RSpec.describe Instruction::NORM do
 
     computer.c.value = 1
 
-    14.times{ instruction.clock! }
+    18.times{ instruction.clock! }
 
     expect(computer.c.value).to eq(0)
   end
@@ -382,7 +382,7 @@ RSpec.describe Instruction::ADD do
     computer.a.value = 0x4
     computer.r[0x0].value = 0x4
 
-    8.times{ instruction.clock! }
+    12.times{ instruction.clock! }
 
     expect(computer.a.value).to eq(0x8)
   end
@@ -395,7 +395,7 @@ RSpec.describe Instruction::ADD do
     computer.c.value = 0x1
     computer.r[0x0].value = 0x4
 
-    8.times{ instruction.clock! }
+    12.times{ instruction.clock! }
 
     expect(computer.a.value).to eq(0x9)
   end
@@ -407,7 +407,7 @@ RSpec.describe Instruction::ADD do
     computer.a.value = 0x4
     computer.r[0x0].value = 0x4
 
-    8.times{ instruction.clock! }
+    12.times{ instruction.clock! }
 
     expect(computer.c.value).to eq(0)
   end
@@ -419,7 +419,7 @@ RSpec.describe Instruction::ADD do
     computer.a.value = 0xf
     computer.r[0x0].value = 0x4
 
-    8.times{ instruction.clock! }
+    12.times{ instruction.clock! }
 
     expect(computer.c.value).to eq(1)
   end
@@ -431,7 +431,7 @@ RSpec.describe Instruction::ADD do
     computer.a.value = 0x4
     computer.r[0x0].value = 0x4
 
-    8.times{ instruction.clock! }
+    12.times{ instruction.clock! }
 
     expect(computer.z.value).to eq(0)
   end
@@ -443,7 +443,7 @@ RSpec.describe Instruction::ADD do
     computer.a.value = 0xf
     computer.r[0x0].value = 0x1
 
-    8.times{ instruction.clock! }
+    12.times{ instruction.clock! }
 
     expect(computer.z.value).to eq(1)
   end
@@ -457,7 +457,7 @@ RSpec.describe Instruction::ADDI do
     computer.a.value = 0x4
     computer.ram[0x001].value = 0x4
 
-    8.times{ instruction.clock! }
+    12.times{ instruction.clock! }
 
     expect(computer.a.value).to eq(0x8)
   end
@@ -470,7 +470,7 @@ RSpec.describe Instruction::ADDI do
     computer.c.value = 0x1
     computer.ram[0x001].value = 0x4
 
-    8.times{ instruction.clock! }
+    12.times{ instruction.clock! }
 
     expect(computer.a.value).to eq(0x9)
   end
@@ -482,7 +482,7 @@ RSpec.describe Instruction::ADDI do
     computer.a.value = 0x4
     computer.ram[0x001].value = 0x4
 
-    8.times{ instruction.clock! }
+    12.times{ instruction.clock! }
 
     expect(computer.c.value).to eq(0)
   end
@@ -494,7 +494,7 @@ RSpec.describe Instruction::ADDI do
     computer.a.value = 0xf
     computer.ram[0x01].value = 0x4
 
-    8.times{ instruction.clock! }
+    12.times{ instruction.clock! }
 
     expect(computer.c.value).to eq(1)
   end
@@ -506,7 +506,7 @@ RSpec.describe Instruction::ADDI do
     computer.a.value = 0x4
     computer.ram[0x001].value = 0x4
 
-    8.times{ instruction.clock! }
+    12.times{ instruction.clock! }
 
     expect(computer.z.value).to eq(0)
   end
@@ -518,7 +518,7 @@ RSpec.describe Instruction::ADDI do
     computer.a.value = 0xf
     computer.ram[0x001].value = 0x1
 
-    8.times{ instruction.clock! }
+    12.times{ instruction.clock! }
 
     expect(computer.z.value).to eq(1)
   end
@@ -537,7 +537,7 @@ RSpec.describe Instruction::ADDM do
 
     computer.ram[0x04c].value = 0x4
 
-    14.times{ instruction.clock! }
+    18.times{ instruction.clock! }
 
     expect(computer.a.value).to eq(0x8)
   end
@@ -555,7 +555,7 @@ RSpec.describe Instruction::ADDM do
 
     computer.ram[0x04c].value = 0x4
 
-    14.times{ instruction.clock! }
+    18.times{ instruction.clock! }
 
     expect(computer.a.value).to eq(0x9)
   end
@@ -572,7 +572,7 @@ RSpec.describe Instruction::ADDM do
 
     computer.ram[0x04c].value = 0x4
 
-    14.times{ instruction.clock! }
+    18.times{ instruction.clock! }
 
     expect(computer.c.value).to eq(0)
   end
@@ -589,7 +589,7 @@ RSpec.describe Instruction::ADDM do
 
     computer.ram[0x04c].value = 0x4
 
-    14.times{ instruction.clock! }
+    18.times{ instruction.clock! }
 
     expect(computer.c.value).to eq(1)
   end
@@ -606,7 +606,7 @@ RSpec.describe Instruction::ADDM do
 
     computer.ram[0x04c].value = 0x4
 
-    14.times{ instruction.clock! }
+    18.times{ instruction.clock! }
 
     expect(computer.z.value).to eq(0)
   end
@@ -623,7 +623,7 @@ RSpec.describe Instruction::ADDM do
 
     computer.ram[0x04c].value = 0x1
 
-    14.times{ instruction.clock! }
+    18.times{ instruction.clock! }
 
     expect(computer.z.value).to eq(1)
   end
@@ -636,7 +636,7 @@ RSpec.describe Instruction::CMP do
 
     computer.a.value = 0x4
 
-    6.times{ instruction.clock! }
+    9.times{ instruction.clock! }
 
     expect(computer.a.value).to eq(0x4)
   end
@@ -648,7 +648,7 @@ RSpec.describe Instruction::CMP do
     computer.a.value = 0x4
     computer.r[0x0].value = 0x4
 
-    6.times{ instruction.clock! }
+    9.times{ instruction.clock! }
 
     expect(computer.c.value).to eq(0)
   end
@@ -660,7 +660,7 @@ RSpec.describe Instruction::CMP do
     computer.a.value = 0x1
     computer.r[0x0].value = 0xf
 
-    6.times{ instruction.clock! }
+    9.times{ instruction.clock! }
 
     expect(computer.c.value).to eq(1)
   end
@@ -672,7 +672,7 @@ RSpec.describe Instruction::CMP do
     computer.a.value = 0x4
     computer.r[0x0].value = 0x8
 
-    6.times{ instruction.clock! }
+    9.times{ instruction.clock! }
 
     expect(computer.z.value).to eq(0)
   end
@@ -684,7 +684,7 @@ RSpec.describe Instruction::CMP do
     computer.a.value = 0x4
     computer.r[0x0].value = 0x4
 
-    6.times{ instruction.clock! }
+    9.times{ instruction.clock! }
 
     expect(computer.z.value).to eq(1)
   end
@@ -697,7 +697,7 @@ RSpec.describe Instruction::CMPI do
 
     computer.a.value = 0x4
 
-    6.times{ instruction.clock! }
+    9.times{ instruction.clock! }
 
     expect(computer.a.value).to eq(0x4)
   end
@@ -709,7 +709,7 @@ RSpec.describe Instruction::CMPI do
     computer.a.value = 0x4
     computer.ram[0x001].value = 0x4
 
-    6.times{ instruction.clock! }
+    9.times{ instruction.clock! }
 
     expect(computer.c.value).to eq(0)
   end
@@ -721,7 +721,7 @@ RSpec.describe Instruction::CMPI do
     computer.a.value = 0x1
     computer.ram[0x001].value = 0xf
 
-    6.times{ instruction.clock! }
+    9.times{ instruction.clock! }
 
     expect(computer.c.value).to eq(1)
   end
@@ -733,7 +733,7 @@ RSpec.describe Instruction::CMPI do
     computer.a.value = 0x4
     computer.ram[0x001].value = 0x8
 
-    6.times{ instruction.clock! }
+    9.times{ instruction.clock! }
 
     expect(computer.z.value).to eq(0)
   end
@@ -745,7 +745,7 @@ RSpec.describe Instruction::CMPI do
     computer.a.value = 0x4
     computer.ram[0x001].value = 0x4
 
-    6.times{ instruction.clock! }
+    9.times{ instruction.clock! }
 
     expect(computer.z.value).to eq(1)
   end
@@ -758,7 +758,7 @@ RSpec.describe Instruction::CMPM do
 
     computer.a.value = 0x4
 
-    10.times{ instruction.clock! }
+    18.times{ instruction.clock! }
 
     expect(computer.a.value).to eq(0x4)
   end
@@ -775,7 +775,7 @@ RSpec.describe Instruction::CMPM do
 
     computer.ram[0x04c].value = 0x4
 
-    10.times{ instruction.clock! }
+    18.times{ instruction.clock! }
 
     expect(computer.c.value).to eq(0)
   end
@@ -792,7 +792,7 @@ RSpec.describe Instruction::CMPM do
 
     computer.ram[0x04c].value = 0xf
 
-    10.times{ instruction.clock! }
+    18.times{ instruction.clock! }
 
     expect(computer.c.value).to eq(1)
   end
@@ -809,7 +809,7 @@ RSpec.describe Instruction::CMPM do
 
     computer.ram[0x04c].value = 0x2
 
-    10.times{ instruction.clock! }
+    18.times{ instruction.clock! }
 
     expect(computer.z.value).to eq(0)
   end
@@ -826,7 +826,7 @@ RSpec.describe Instruction::CMPM do
 
     computer.ram[0x04c].value = 0x4
 
-    10.times{ instruction.clock! }
+    18.times{ instruction.clock! }
 
     expect(computer.z.value).to eq(1)
   end
