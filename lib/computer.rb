@@ -41,7 +41,7 @@ class Computer
 
     while true do
       clock!
-      sleep 1.0 / 8 / 2 # two instructions per second
+      sleep 1.0 / 30 # 60Hz
     end
   end
 
