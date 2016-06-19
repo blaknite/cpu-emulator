@@ -1,5 +1,5 @@
 class Assembler
-  OPCODES = %w(NOP JMP JC JZ LD LDI LDM ST STC STM NOR NORI ADD ADDI CMP CMPI)
+  OPCODES = %w(JMP JC JZ CALL RET LD LDI LDM ST STM NOR NORI ADD ADDI CMP CMPI)
 
   TERMINALS = {
     /^;.*/ => 'COMMENT',
@@ -14,7 +14,7 @@ class Assembler
   COMMENT = /^COMMENT$/
   IDENTIFIER = /^IDENTIFIER/
   IDENTIFIER_ASSIGNMENT = /^IDENTIFIER WHITESPACE ASSIGNMENT WHITESPACE VALUE( WHITESPACE COMMENT)?$/
-  INSTRUCTION = /^OPCODE WHITESPACE (IDENTIFIER|VALUE)( WHITESPACE COMMENT)?$/
+  INSTRUCTION = /^OPCODE( WHITESPACE (IDENTIFIER|VALUE))?( WHITESPACE COMMENT)?$/
 
   def self.assemble_program!(program)
     assembler = self.new(program)
@@ -77,16 +77,19 @@ class Assembler
     def assemble_microcode(tokens)
       fail 'invalid instruction' unless build_phrase(tokens) =~ INSTRUCTION
 
-      instruction_data = [get_opcode(tokens[0][:value])]
+      instruction_data = [get_opcode(tokens[0][:value]) << 4]
+
+      return instruction_data if %w(RET).include?(tokens[0][:value])
 
       operand = tokens[2][:type] == 'VALUE' ? tokens[2][:value].to_i(16) : get_identifier(tokens[2][:value])
 
-      if %w(JMP JC JZ LDM STM).include?(tokens[0][:value])
-        instruction_data << ((operand & 0xf00) >> 0x8)
-        instruction_data << ((operand & 0x0f0) >> 0x4)
-        instruction_data << (operand & 0x00f)
-      elsif %w(LD LDI ST STC NOR NORI ADD ADDI CMP CMPI).include?(tokens[0][:value])
-        instruction_data << (operand & 0x00f)
+      if %w(JMP JC JZ CALL LDM STM).include?(tokens[0][:value])
+        instruction_data[0] += ((operand & 0xf00) >> 0x8)
+        instruction_data << (operand & 0xff)
+      elsif %w(LDI NORI ADDI CMPI).include?(tokens[0][:value])
+        instruction_data << (operand & 0xff)
+      elsif %w(LD ST NOR ADD CMP).include?(tokens[0][:value])
+        instruction_data[0] += (operand & 0xf)
       end
 
       instruction_data

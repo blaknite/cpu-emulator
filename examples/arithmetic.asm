@@ -1,40 +1,42 @@
 ; perform all arithmetic operations
 
-A = 0x0
+A = ZERO
 B = 0x1
-TEMP = 0xf
+TEMP = 0xe
+ZERO = 0xf
 
-START   LDI   0x6
+START   LDI   0x0
+        ST    ZERO
+        LDI   0x6
         ST    A
         LDI   0x2
         ST    B
-        JMP   MUL     ; change this to perform a different operation
+        CALL  MUL     ; change this to perform a different operation
 
 STORE   STM   0xfff   ; store result
 
 DONE    JMP   DONE
 
 ; perform subtraction
-SUB     LDI   0x0
-        STC   0x0
-        LD    B       ; load B
-        NORI  0x0     ; 2's compliment of B
-        ADDI  0x1
-        STC   0x0
+SUB     LD    B       ; load B
+        NOR   ZERO
+        ADDI  0x1     ; 2's compliment of B
         ADD   A       ; add A to B
-        JMP   STORE
+        RET
 
 ; perform multiplication
-MUL     LDI   0x0
-        STC   0x0
+MUL     LD    B
+        NOR   ZERO
+        ADDI  0x1     ; 2's compliment of B
+        ST    B
+        LD    ZERO
         ST    TEMP
-MUL2    LD    TEMP    ; load result
-        STC   0x0
-        ADD   A       ; add A to result
+MUL2    ADD   A       ; add A to TEMP
         ST    TEMP    ; store result
         LD    B       ; load B
-        STC   0x0
-        ADDI  0xf     ; subtract 1 from B
-        JZ    STORE   ; we're done if B == 0
+        ADDI  0x1     ; ADD 1 to B
+        JZ    MUL3    ; we're done if B == 0
         ST    B       ; store B
+        LD    TEMP    ; load TEMP
         JMP   MUL2    ; loop
+MUL3    RET

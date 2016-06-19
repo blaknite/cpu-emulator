@@ -2,13 +2,15 @@
 
 A = 0x0
 B = 0x1
-TEMP = 0xf
+TEMP = 0xe
+ZERO = 0xf
 
 START   LDI   0x0
+        ST    ZERO
         ST    A
         LDI   0x6
         ST    B
-        JMP   XNOR    ; change this to perform a different operation
+        CALL  XNOR    ; change this to perform a different operation
 
 STORE   STM   0xfff
 
@@ -16,57 +18,57 @@ DONE    JMP   DONE
 
 ; perform NOT
 NOT     LD    A
-        NORI  0x0     ; NOR with zero is same as NOT
-        JMP   STORE
+        NOR   ZERO    ; NOR with zero is same as NOT
+        RET
 
 ; perform AND
 AND     LD    A
-        NORI  0x0     ; NOT of first value
+        NOR   ZERO    ; NOT of first value
         ST    A
         LD    B
-        NORI  0x0    ; NOT of second value
+        NOR   ZERO    ; NOT of second value
         NOR   A       ; NOR of results
-        JMP   STORE
+        RET
 
 ; perform NAND
 NAND    LD    A
-        NORI  0x0    ; NOT of first value
+        NOR   ZERO    ; NOT of first value
         ST    A
         LD    B
-        NORI  0x0     ; NOT of second value
+        NOR   ZERO    ; NOT of second value
         NOR   A       ; NOR of results
-        NORI  0x0     ; NOT of result
-        JMP   STORE
+        NOR   ZERO    ; NOT of result
+        RET
 
 ; perform OR
 OR      LD    A
         NOR   B       ; NOR of values
-        NORI  0x0     ; NOT of result
-        JMP   STORE
+        NOR   ZERO    ; NOT of result
+        RET
 
 ; perform XOR
 XOR     LD    A
-        NORI  0x0     ; NOT of first value
+        NOR   ZERO    ; NOT of first value
         ST    TEMP
         LD    B
-        NORI  0x0     ; NOT of second value
+        NOR   ZERO    ; NOT of second value
         NOR   TEMP    ; NOR of results
         ST    TEMP
         LD    A
         NOR   B       ; NOR of original values
         NOR   TEMP    ; NOR of results
-        JMP   STORE
+        RET
 
 ; perform XNOR
 XNOR    LD    A
-        NORI  0x0     ; NOT of first value
+        NOR   ZERO    ; NOT of first value
         ST    TEMP
         LD    B
-        NORI  0x0     ; NOT of second value
+        NOR   ZERO    ; NOT of second value
         NOR   TEMP    ; NOR of results
         ST    TEMP
         LD    A
         NOR   B       ; NOR of original values
         NOR   TEMP    ; NOR of results
-        NORI  0x0     ; NOT of result
-        JMP   STORE
+        NOR   ZERO    ; NOT of result
+        RET
