@@ -5,10 +5,10 @@ B = 0x1
 TEMP = 0xe
 ZERO = 0xf
 
-START   LDI   0x0
+START   LDI   0
         ST    ZERO
         ST    A
-        LDI   0x6
+        LDI   6
         ST    B
         CALL  XNOR    ; change this to perform a different operation
 
