@@ -98,11 +98,14 @@ class Assembler
       end
 
       if %w(JMP JC JZ CALL LDM STM).include?(tokens[0][:value])
+        fail 'operand must be 12-bits or less' if operand > 0xfff
         instruction_data[0] += ((operand & 0xf00) >> 0x8)
         instruction_data << (operand & 0xff)
       elsif %w(LDI NORI ADDI CMPI).include?(tokens[0][:value])
+        fail 'operand must be 8-bits or less' if operand > 0xff
         instruction_data << (operand & 0xff)
       elsif %w(LD ST NOR ADD CMP).include?(tokens[0][:value])
+        fail 'operand must be 4-bits or less' if operand > 0xf
         instruction_data[0] += (operand & 0xf)
       end
 
