@@ -1,6 +1,6 @@
 ; perform all arithmetic operations
 
-A = ZERO
+A = 0x0
 B = 0x1
 TEMP = 0xe
 ZERO = 0xf
