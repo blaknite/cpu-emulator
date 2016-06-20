@@ -8,15 +8,16 @@ class Assembler
     /^0b[0-9A-F]+\b/i => 'BINARY',
     /^[0-9]+\b/i => 'DECIMAL',
     /^0x[0-9A-F]+\b/i => 'HEXIDECIMAL',
+    /^(('.')|("."))/i => 'LETTER',
     /^=/i => 'ASSIGNMENT',
     /^\s+/i => 'WHITESPACE',
   }
 
-  LINE = /^([\w=\s]+)?(;.*)?$/i
+  LINE = /^([\w=\s(('.')|("."))]+)?(;.*)?$/i
   COMMENT = /^COMMENT$/
   IDENTIFIER = /^IDENTIFIER/
-  IDENTIFIER_ASSIGNMENT = /^IDENTIFIER WHITESPACE ASSIGNMENT WHITESPACE (BINARY|DECIMAL|HEXIDECIMAL)( WHITESPACE COMMENT)?$/
-  INSTRUCTION = /^OPCODE( WHITESPACE (IDENTIFIER|BINARY|DECIMAL|HEXIDECIMAL))?( WHITESPACE COMMENT)?$/
+  IDENTIFIER_ASSIGNMENT = /^IDENTIFIER WHITESPACE ASSIGNMENT WHITESPACE (BINARY|DECIMAL|HEXIDECIMAL|LETTER)( WHITESPACE COMMENT)?$/
+  INSTRUCTION = /^OPCODE( WHITESPACE (IDENTIFIER|BINARY|DECIMAL|HEXIDECIMAL|LETTER))?( WHITESPACE COMMENT)?$/
 
   def self.assemble_program!(program)
     assembler = self.new(program)
@@ -90,6 +91,8 @@ class Assembler
         operand = tokens[2][:value].to_i
       when 'HEXIDECIMAL'
         operand = tokens[2][:value].to_i(16)
+      when 'LETTER'
+        operand = tokens[2][:value][1].ord
       else
         operand = get_identifier(tokens[2][:value])
       end
@@ -116,11 +119,13 @@ class Assembler
       if build_phrase(tokens) =~ IDENTIFIER_ASSIGNMENT
         case tokens[4][:type]
         when 'BINARY'
-          @identifiers[tokens[0][:value]]  = tokens[4][:value].to_i(2)
+          @identifiers[tokens[0][:value]] = tokens[4][:value].to_i(2)
         when 'DECIMAL'
-          @identifiers[tokens[0][:value]]  = tokens[4][:value].to_i
+          @identifiers[tokens[0][:value]] = tokens[4][:value].to_i
         when 'HEXIDECIMAL'
-          @identifiers[tokens[0][:value]]  = tokens[4][:value].to_i(16)
+          @identifiers[tokens[0][:value]] = tokens[4][:value].to_i(16)
+        when 'LETTER'
+          @identifiers[tokens[0][:value]] = tokens[4][:value][1].ord
         end
       else
         @identifiers[tokens[0][:value]] = @program_data.length
