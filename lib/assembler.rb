@@ -39,7 +39,7 @@ class Assembler
 
       print "complete!\n"
 
-      @program_data.map{ |pd| '0x' + pd.to_s(16) }.join(' ')
+      @program_data
     rescue StandardError => e
       print "failed!\n"
 

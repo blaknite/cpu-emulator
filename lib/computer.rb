@@ -36,8 +36,8 @@ class Computer
   alias_method :pc, :program_counter
 
   def load_program(program_data)
-    program_data.split(' ').each_with_index do |pd, i|
-      @ram[i].value = pd.to_i(16)
+    program_data.each_with_index do |pd, i|
+      @ram[i].value = pd
     end
   end
 

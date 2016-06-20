@@ -39,4 +39,5 @@ MUL2    ADD   A       ; add A to TEMP
         ST    B       ; store B
         LD    TEMP    ; load TEMP
         JMP   MUL2    ; loop
-MUL3    RET
+MUL3    LD    TEMP    ; load TEMP
+        RET

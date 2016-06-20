@@ -12,5 +12,5 @@ unless bin
 end
 
 c = Computer.new
-c.load_program(File.open(bin, 'r').read)
+c.load_program(File.open(bin, 'r').read.unpack('C*'))
 c.run!
