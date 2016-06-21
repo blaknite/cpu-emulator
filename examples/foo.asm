@@ -1,4 +1,4 @@
-; calculate 4 + 4
+; Print input to output
 
 START   LDI   0x0a
         CALL  PRINT
