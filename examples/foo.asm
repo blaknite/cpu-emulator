@@ -1,10 +1,35 @@
 ; calculate 4 + 4
 
-A = 4
-B = 8
+START   LDI   0x0a
+        CALL  PRINT
+        LDI   'L'
+        CALL  PRINT
+        LDI   'o'
+        CALL  PRINT
+        LDI   'a'
+        CALL  PRINT
+        LDI   'd'
+        CALL  PRINT
+        LDI   'i'
+        CALL  PRINT
+        LDI   'n'
+        CALL  PRINT
+        LDI   'g'
+        CALL  PRINT
+        LDI   '.'
+        CALL  PRINT
+        LDI   '.'
+        CALL  PRINT
+        LDI   '.'
+        CALL  PRINT
+        LDI   0x0a
+        CALL  PRINT
 
-START   LDI   A
-        ADDI  B
-        STM   0xfff
+INPUT   LDM   0xff0
+        CMPI  0
+        JZ    INPUT
+        CALL  PRINT
+        JMP   INPUT
 
-DONE    JMP   DONE
+PRINT   STM   0xff8
+        RET

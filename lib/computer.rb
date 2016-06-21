@@ -20,6 +20,8 @@ class Computer
     @instruction_counter = Register.new(5)
     @instruction_register = Register.new(16)
     @ram = Array.new(2**12){ Register.new(8) }
+    (0xff0..0xff7).each{ |n| @ram[n] = InputRegister.new }
+    (0xff8..0xfff).each{ |n| @ram[n] = OutputRegister.new }
     @registers = Array.new(16){ Register.new(8) }
     @stack = Array.new(4){ Register.new(12) }
     @temp_a = Register.new(8)

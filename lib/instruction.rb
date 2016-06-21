@@ -473,7 +473,7 @@ class Instruction::CMPI < Instruction
     @steps << -> {
       result = @computer.ta.value - @computer.tb.value
       @computer.c.value = result[4]
-      @computer.z.value = result & 0xf == 0 ? 1 : 0
+      @computer.z.value = result & 0xff == 0 ? 1 : 0
       @computer.bus.value = 0
     }
   end

@@ -35,3 +35,36 @@ class Register < Array
     join.rjust(bits, "0")
   end
 end
+
+class OutputRegister < Register
+  attr_accessor :file
+
+  def initialize(value = 0)
+    @file = 'output.txt'
+    super(8, value)
+  end
+
+  def value=(new_value)
+    super(new_value)
+    File.open(@file, 'a') do |f|
+      f << [value].pack('C*')
+    end
+  end
+end
+
+class InputRegister < Register
+  attr_accessor :file
+
+  def initialize(value = 0)
+    @file = 'input.txt'
+    @char_index = 0
+    super(8, value)
+  end
+
+  def value
+    char = File.open(@file, 'r').read.unpack('C*')[@char_index]
+
+    @char_index += 1 if char
+    char || 0x00
+  end
+end

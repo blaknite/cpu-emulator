@@ -34,8 +34,16 @@ RSpec.describe Computer do
       # the ram must be an array of 2^12 8-bit registers
       expect(computer.ram).to be_a(Array)
       expect(computer.ram.length).to eq(2**12)
-      computer.ram.each do |r|
+      computer.ram[0x000..0xfef].each do |r|
         expect(r).to be_a(Register)
+        expect(r.bits).to eq(8)
+      end
+      computer.ram[0xff0..0xff7].each do |r|
+        expect(r).to be_a(InputRegister)
+        expect(r.bits).to eq(8)
+      end
+      computer.ram[0xff8..0xfff].each do |r|
+        expect(r).to be_a(OutputRegister)
         expect(r.bits).to eq(8)
       end
 
