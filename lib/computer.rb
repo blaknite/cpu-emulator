@@ -19,7 +19,7 @@ class Computer
     @carry = Register.new(1)
     @instruction_counter = Register.new(5)
     @instruction_register = Register.new(16)
-    @ram = Array.new(2**12){ Register.new(8) }
+    @ram = Array.new(0xfef + 1){ Register.new(8) }
     (0xff0..0xff7).each{ |n| @ram[n] = InputRegister.new }
     (0xff8..0xfff).each{ |n| @ram[n] = OutputRegister.new }
     @registers = Array.new(16){ Register.new(8) }
@@ -48,7 +48,7 @@ class Computer
 
     while true do
       clock!
-      sleep 1.0 / 30 # 60Hz
+      sleep 1.0 / 30 # 30Hz
     end
   end
 
