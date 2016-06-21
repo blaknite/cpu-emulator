@@ -63,7 +63,7 @@ HEX : BIN  : CODE : T : DESCRIPTION
 
 ## Memory-mapped I/O
 Memory addresses `0xff0` to `0xff7` are reserved as input registers.
-Memory addresses `0xff8` to `0xff8` are reserved as output registers.
+Memory addresses `0xff8` to `0xfff` are reserved as output registers.
 Writing to an input address is ignored. Reading from an output address reads the most recent output.
 
 ## Example
