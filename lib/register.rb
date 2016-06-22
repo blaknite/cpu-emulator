@@ -37,7 +37,7 @@ class Register < Array
 end
 
 class OutputRegister < Register
-  attr_accessor :file
+  attr_accessor :filename
 
   def initialize(address = nil, value = 0)
     @filename = "tmp/output#{'_' + address.to_s(16) if address}.txt"
@@ -53,7 +53,7 @@ class OutputRegister < Register
 end
 
 class InputRegister < Register
-  attr_accessor :file
+  attr_accessor :filename
 
   def initialize(address = nil, value = 0)
     @filename = "tmp/input#{'_' + address.to_s(16) if address}.txt"
