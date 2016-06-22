@@ -40,19 +40,15 @@ class OutputRegister < Register
   attr_accessor :file
 
   def initialize(address = nil, value = 0)
-    @file = "output#{'_' + address.to_s(16) if address}.txt"
+    @filename = "output#{'_' + address.to_s(16) if address}.txt"
+    File.open(@filename, 'w'){ |f| f << nil }
     @bits = 8
-    File.open(@file, 'w') do |f|
-      f << nil
-    end
     replace((@bits - 1).downto(0).map{ |n| value[n] })
   end
 
   def value=(new_value)
     super(new_value)
-    File.open(@file, 'a') do |f|
-      f << [value].pack('C*')
-    end
+    File.open(@filename, 'a'){ |f| f << [new_value].pack('C*') }
   end
 end
 
@@ -60,18 +56,13 @@ class InputRegister < Register
   attr_accessor :file
 
   def initialize(address = nil, value = 0)
-    @file = "input#{'_' + address.to_s(16) if address}.txt"
-    @char_index = 0
-    File.open(@file, 'w') do |f|
-      f << nil
-    end
+    @filename = "input#{'_' + address.to_s(16) if address}.txt"
+    @file = File.open(@filename, 'w+')
+    @file.write(nil)
     super(8, value)
   end
 
   def value
-    char = File.open(@file, 'r').read.unpack('C*')[@char_index]
-
-    @char_index += 1 if char
-    char || 0x00
+    @file.getbyte || 0x00
   end
 end
