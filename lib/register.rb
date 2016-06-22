@@ -40,7 +40,7 @@ class OutputRegister < Register
   attr_accessor :file
 
   def initialize(address = nil, value = 0)
-    @filename = "output#{'_' + address.to_s(16) if address}.txt"
+    @filename = "tmp/output#{'_' + address.to_s(16) if address}.txt"
     File.open(@filename, 'w'){ |f| f << nil }
     @bits = 8
     replace((@bits - 1).downto(0).map{ |n| value[n] })
@@ -56,7 +56,7 @@ class InputRegister < Register
   attr_accessor :file
 
   def initialize(address = nil, value = 0)
-    @filename = "input#{'_' + address.to_s(16) if address}.txt"
+    @filename = "tmp/input#{'_' + address.to_s(16) if address}.txt"
     @file = File.open(@filename, 'w+')
     @file.write(nil)
     super(8, value)
