@@ -100,7 +100,7 @@ RSpec.describe InputRegister do
     it 'reads the input file' do
       input = InputRegister.new
 
-      expect(input.value).to eq(File.open(input.file, 'r').read.unpack('C*')[0])
+      expect(input.value).to eq(File.open(input.file, 'r').read.unpack('C*')[0] || 0x00)
     end
   end
 end

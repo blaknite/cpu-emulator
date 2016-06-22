@@ -39,8 +39,8 @@ end
 class OutputRegister < Register
   attr_accessor :file
 
-  def initialize(value = 0)
-    @file = 'output.txt'
+  def initialize(address = nil, value = 0)
+    @file = "output#{'_' + address.to_s(16) if address}.txt"
     super(8, value)
   end
 
@@ -55,9 +55,12 @@ end
 class InputRegister < Register
   attr_accessor :file
 
-  def initialize(value = 0)
-    @file = 'input.txt'
+  def initialize(address = nil, value = 0)
+    @file = "input#{'_' + address.to_s(16) if address}.txt"
     @char_index = 0
+    File.open(@file, 'a') do |f|
+      f << nil
+    end
     super(8, value)
   end
 
