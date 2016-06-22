@@ -41,7 +41,11 @@ class OutputRegister < Register
 
   def initialize(address = nil, value = 0)
     @file = "output#{'_' + address.to_s(16) if address}.txt"
-    super(8, value)
+    @bits = 8
+    File.open(@file, 'w') do |f|
+      f << nil
+    end
+    replace((@bits - 1).downto(0).map{ |n| value[n] })
   end
 
   def value=(new_value)
@@ -58,7 +62,7 @@ class InputRegister < Register
   def initialize(address = nil, value = 0)
     @file = "input#{'_' + address.to_s(16) if address}.txt"
     @char_index = 0
-    File.open(@file, 'a') do |f|
+    File.open(@file, 'w') do |f|
       f << nil
     end
     super(8, value)
