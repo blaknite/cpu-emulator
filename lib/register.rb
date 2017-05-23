@@ -3,21 +3,17 @@
 #
 # Can be of any number of bits.
 # Only accepts integers whose binary representation is less or equal the register's bit length.
-class Register < Array
-  attr_reader :bits
+class Register
+  attr_reader :bits, :value
 
   def initialize(bits, value = 0)
     @bits = bits
     self.value = value
   end
 
-  def value=(new_value)
-    fail 'value is not an integer' unless new_value.is_a?(Integer)
-    replace((@bits - 1).downto(0).map{ |n| new_value[n] })
-  end
-
-  def value
-    join.to_i(2)
+  def value=(value)
+    fail 'value is not an integer' unless value.is_a?(Integer)
+    @value = value & ( 2**bits - 1 )
   end
 
   alias_method :to_int, :value
@@ -32,7 +28,7 @@ class Register < Array
   end
 
   def to_bin
-    join.rjust(bits, "0")
+    bits.downto(1).map{ |bit| value[bit - 1].to_s }.join
   end
 end
 
@@ -43,7 +39,7 @@ class OutputRegister < Register
     @filename = "tmp/output#{'_' + address.to_s(16) if address}.txt"
     File.open(@filename, 'w'){ |f| f << nil }
     @bits = 8
-    replace((@bits - 1).downto(0).map{ |n| value[n] })
+    @value = 0
   end
 
   def value=(new_value)
