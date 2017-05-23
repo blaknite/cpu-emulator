@@ -1,120 +1,114 @@
+require 'spec_helper'
 require 'register'
 
 RSpec.describe Register do
   describe 'new' do
-    it 'initializes a 4-bit register' do
-      register = Register.new(4)
+    let(:register) { Register.new(4) }
 
+    it 'should be a 4-bit register' do
       expect(register.bits).to eq(4)
     end
 
-    it 'initializes a register with default value of 0' do
-      register = Register.new(1)
-
+    it 'should have a default value of 0' do
       expect(register.value).to eq(0)
     end
 
-    it 'initializes a register with the given initial value' do
-      register = Register.new(1, 1)
+    context 'when a default value is provided' do
+      let(:register) { Register.new(4, 1) }
 
-      expect(register.value).to eq(1)
+      it 'initializes a register with the given initial value' do
+        expect(register.value).to eq(1)
+      end
     end
   end
 
   describe 'value=' do
-    it 'only stores integers' do
-      register = Register.new(1)
+    let(:register) { Register.new(4) }
 
+    it 'only stores integers' do
       expect{ register.value = 'foo' }.to raise_exception(StandardError, 'value is not an integer')
     end
 
     it 'only stores the first n bits' do
-      register = Register.new(4)
       register.value = 0xff
-
       expect(register.value).to eq(0xf)
     end
 
     it 'stores a value less <= n bits' do
-      register = Register.new(1)
-      register.value = 0xf
-
-      expect(register.value).to eq(0x1)
+      register.value = 0xff
+      expect(register.value).to eq(0xf)
     end
   end
 
   describe 'value' do
-    it 'returns an integer' do
-      register = Register.new(4)
-      register.value = 0xa
+    let(:register) { Register.new(4, 0xa) }
 
+    it 'returns an integer' do
       expect(register.value).to eq(0xa)
     end
   end
 
   describe 'bits' do
-    it 'returns the size in bits' do
-      register = Register.new(4)
+    let(:register) { Register.new(4) }
 
+    it 'returns the size in bits' do
       expect(register.bits).to eq(4)
     end
   end
 
   describe 'to_s' do
-    it 'returns value as a decimal string' do
-      register = Register.new(4)
-      register.value = 0xa
+    let(:register) { Register.new(4, 0xa) }
 
+    it 'returns value as a decimal string' do
       expect(register.to_s).to eq('10')
     end
   end
 
   describe 'to_int' do
-    it 'returns value as an integer' do
-      register = Register.new(4)
-      register.value = 0xa
+    let(:register) { Register.new(4, 0xa) }
 
+    it 'returns value as an integer' do
       expect(register.to_int).to eq(0xa)
     end
   end
 
   describe 'to_hex' do
-    it 'returns the value as a hexidecimal string with padding' do
-      register = Register.new(8, 0xf)
+    let(:register) { Register.new(4, 0xa) }
 
-      expect(register.to_hex).to eq('0x0f')
+    it 'returns the value as a hexidecimal string' do
+      expect(register.to_hex).to eq('0xa')
     end
   end
 
   describe 'to_bin' do
-    it 'returns the value as binary string with padding' do
-      register = Register.new(8, 0xf)
+    let(:register) { Register.new(4, 0xa) }
 
-      expect(register.to_bin).to eq('00001111')
+    it 'returns the value as binary string' do
+      expect(register.to_bin).to eq('1010')
     end
   end
 end
 
 RSpec.describe InputRegister do
   describe 'value' do
-    it 'reads the input file' do
-      input = InputRegister.new
+    let(:register) { InputRegister.new }
 
-      expect(input.value).to eq(File.open(input.filename, 'r').read.unpack('C*')[0] || 0x00)
+    it 'reads the input file' do
+      expect(register.value).to eq(File.open(register.filename, 'r').read.unpack('C*')[0] || 0x00)
     end
   end
 end
 
 RSpec.describe OutputRegister do
   describe 'value=' do
+    let(:register) { OutputRegister.new }
+
     it 'appends the output file' do
-      output = OutputRegister.new
+      register.value = 'f'.ord
+      register.value = 'o'.ord
+      register.value = 'o'.ord
 
-      output.value = 'f'.ord
-      output.value = 'o'.ord
-      output.value = 'o'.ord
-
-      expect(File.open(output.filename, 'r').read[-3..-1]).to eq("foo")
+      expect(File.open(register.filename, 'r').read[-3..-1]).to eq("foo")
     end
   end
 end
