@@ -16,7 +16,7 @@ module Computer
 
   CYCLE = InstructionCycle.new
 
-  FREQUENCY = 30 # Hz
+  FREQUENCY = 60 # Hz
 
   def self.debug=(value)
     @debug = value

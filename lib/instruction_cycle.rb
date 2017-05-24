@@ -12,8 +12,8 @@ class InstructionCycle
   end
 
   def clock!
-    switch_state! if @steps.empty?
-    execute_step! if @steps.any?
+    switch_state! if steps.empty?
+    execute_step! if steps.any?
     increment_counter!
     print! if Computer.debug?
   end
@@ -55,10 +55,10 @@ class InstructionCycle
 
   def print!
     output = ''
-    output += '|' if @counter == 1
-    output += " - #{Computer::STACK.to_hex} - #{opcode.to_s.ljust(4)} - |" if @counter == 1 && state == :execute
+    output += "#{Computer::STACK.to_hex} - " if counter == 1 && state == :fetch
+    output += "|" if counter == 1
     output += '#'
-    output += "|\n" if @steps.empty? && state == :execute
+    output += "| - #{opcode.to_s.ljust(4)}\n" if steps.empty? && state == :execute
 
     print output
   end
