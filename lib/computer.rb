@@ -16,6 +16,8 @@ module Computer
 
   CYCLE = InstructionCycle.new
 
+  FREQUENCY = 30 # Hz
+
   def self.debug=(value)
     @debug = value
   end
@@ -54,7 +56,7 @@ module Computer
 
     while true do
       clock!
-      sleep 1.0 / 30 # 30Hz
+      sleep 1.0 / FREQUENCY
     end
   end
 

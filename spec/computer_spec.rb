@@ -6,6 +6,9 @@ RSpec.describe Computer do
   end
 
   it 'is a valid computer' do
+    # the frequency must be set
+    expect(Computer::FREQUENCY).to be_a Integer
+
     # this is a 8-bit computer so the accumulator must be a 8-bit register
     expect(Computer::A).to be_a Register
     expect(Computer::A.bits).to eq 8
