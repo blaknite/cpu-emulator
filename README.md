@@ -47,17 +47,17 @@ HEX : BIN  : CODE : T : DESCRIPTION
 0x1 : 0001 : JC   :  9 : Jump to memory address if carry.
 0x2 : 0010 : JZ   :  9 : Jump to memory address if zero.
 0x3 : 0011 : CALL :  9 : Jump to memory address and save previous address to stack.
-0x4 : 0100 : RET  :  6 : Jump to memory address one down in stack.
+0x4 : 0100 : RET  :  5 : Jump to memory address one down in stack.
 0x5 : 0101 : LD   :  7 : Load register to accumulator.
-0x6 : 0110 : LDI  : 10 : Load immediate value to accumulator.
-0x7 : 0111 : LDM  : 10 : Load memory to accumulator.
+0x6 : 0110 : LDI  : 11 : Load immediate value to accumulator.
+0x7 : 0111 : LDM  : 11 : Load memory to accumulator.
 0x8 : 1000 : ST   :  7 : Store accumulator in register.
-0x9 : 1001 : STM  : 10 : Store accumulator in memory.
+0x9 : 1001 : STM  : 11 : Store accumulator in memory.
 0xa : 1010 : NOR  : 10 : Logical NOR of register and accumulator.
-0xb : 1011 : NORI : 13 : Logical NOR of immediate value and accumulator.
+0xb : 1011 : NORI : 14 : Logical NOR of immediate value and accumulator.
 0xc : 1100 : ADD  : 10 : Add register to accumulator.
-0xd : 1101 : ADDI : 13 : Add immediate value to accumulator.
-0xe : 1110 : CMP  :  9 : Compare register with accumulator.
+0xd : 1101 : ADDI : 14 : Add immediate value to accumulator.
+0xe : 1110 : CMP  :  8 : Compare register with accumulator.
 0xf : 1111 : CMPI : 12 : Compare immediate value with accumulator.
 
 * T is the number of clock cycles required to perform the instruction
@@ -87,9 +87,9 @@ Assembling program..........complete!
 $ ruby bin/run.rb examples/test.bin
 Program loaded!
 Running...
-|####| - 0x001 - LDI  - |########|
-|####| - 0x003 - ADDI - |##########|
-|####| - 0x005 - STM  - |#######|
-|####| - 0x007 - JMP  - |####|
+0x000 - |####|####|###| - LDI
+0x002 - |####|####|######| - ADDI
+0x004 - |####|####|###| - STM
+0x006 - |####|####|#| - JMP
 ...
 ```

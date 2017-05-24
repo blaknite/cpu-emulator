@@ -28,6 +28,7 @@ class InstructionCycle
     @states.rotate!
     reset_counter!
     initialize_state!
+    switch_state! if steps.empty? && state == :decode
   end
 
   def initialize_state!
@@ -35,7 +36,7 @@ class InstructionCycle
     when :fetch
       @steps = Transaction.get(:fetch_first_byte)
     when :decode
-      @steps = Transaction.get(:fetch_second_byte) if Instruction::OPCODES[opcode] == 2
+      @steps = Transaction.get(:fetch_second_byte) if second_byte_required?
     when :execute
       @steps = Instruction.get(opcode)
     end
@@ -65,5 +66,9 @@ class InstructionCycle
 
   def opcode
     Instruction::OPCODES.keys[Computer::INSTRUCTION.value >> 12]
+  end
+
+  def second_byte_required?
+    Instruction::OPCODES[opcode] == 2
   end
 end
