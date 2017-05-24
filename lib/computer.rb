@@ -1,50 +1,56 @@
-require 'instruction'
+require 'definitions'
+require 'instruction_cycle'
 require 'register'
+require 'stack'
 
-class Computer
-  attr_reader :accumulator, :bus, :carry, :instruction_counter, :instruction_register, :ram, :registers, :stack, :temp_a, :temp_b, :zero
+module Computer
+  A           = Register.new(8)
+  B           = Register.new(8)
+  BUS         = Register.new(8)
+  CARRY       = Register.new(1)
+  INSTRUCTION = Register.new(16)
+  RAM         = Array.new(4096) { Register.new(8) }
+  REGISTER    = Array.new(16)   { Register.new(8) }
+  STACK       = Stack.new(12)
+  ZERO        = Register.new(1)
 
-  alias_method :a, :accumulator
-  alias_method :c, :carry
-  alias_method :ic, :instruction_counter
-  alias_method :i, :instruction_register
-  alias_method :r, :registers
-  alias_method :ta, :temp_a
-  alias_method :tb, :temp_b
-  alias_method :z, :zero
+  CYCLE = InstructionCycle.new
 
-  def initialize
-    @accumulator = Register.new(8)
-    @bus = Register.new(8)
-    @carry = Register.new(1)
-    @instruction_counter = Register.new(5)
-    @instruction_register = Register.new(16)
-    @ram = Array.new(0xfef + 1){ Register.new(8) }
-    (0xff0..0xff7).each{ |n| @ram[n] = InputRegister.new(n) }
-    (0xff8..0xfff).each{ |n| @ram[n] = OutputRegister.new(n) }
-    @registers = Array.new(16){ Register.new(8) }
-    @stack = Array.new(4){ Register.new(12) }
-    @temp_a = Register.new(8)
-    @temp_b = Register.new(8)
-    @zero = Register.new(1)
-    @instructions = Array.new(16){ |i| Instruction.from_opcode(i, self) }
-    @instruction = nil
+  def self.debug=(value)
+    @debug = value
   end
 
-  def program_counter
-    @stack.first
+  def self.debug?
+    @debug
   end
 
-  alias_method :pc, :program_counter
-
-  def load_program(program_data)
-    program_data.each_with_index do |pd, i|
-      @ram[i].value = pd
+  def self.load_program(program)
+    reset!
+    program.each_with_index do |d, i|
+      RAM[i].value = d
     end
+    puts "Program loaded!" if Computer.debug?
   end
 
-  def run!
-    print 'Running...'
+  def self.load_file(file)
+    load_program(File.open(file, 'r').read.unpack('C*'))
+  end
+
+  def self.reset!
+    A.value = 0
+    B.value = 0
+    BUS.value = 0
+    CARRY.value = 0
+    INSTRUCTION.value = 0
+    ZERO.value = 0
+    RAM.each{ |r| r.value = 0 }
+    REGISTER.each{ |r| r.value = 0 }
+    STACK.reset!
+    CYCLE.reset!
+  end
+
+  def self.run!
+    puts "Running..." if Computer.debug?
 
     while true do
       clock!
@@ -52,18 +58,7 @@ class Computer
     end
   end
 
-  def clock!
-    if @instruction.nil? || @instruction_counter.value == 0x0
-      @instruction = @instructions[(@ram[program_counter.value].value & 0xf0) >> 4]
-
-      print "\n#{program_counter.to_hex} - #{@instruction.name.ljust(4)} - |"
-    end
-
-    @instruction.clock!
-
-    print '#'
-    print "|" if @instruction_counter.value == 0x0
-
-    nil
+  def self.clock!
+    CYCLE.clock!
   end
 end

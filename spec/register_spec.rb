@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'register'
 
 RSpec.describe Register do
   describe 'new' do
@@ -26,7 +25,7 @@ RSpec.describe Register do
     let(:register) { Register.new(4) }
 
     it 'only stores integers' do
-      expect{ register.value = 'foo' }.to raise_exception(StandardError, 'value is not an integer')
+      expect{ register.value = 'foo' }.to raise_error(StandardError, 'value is not an integer')
     end
 
     it 'only stores the first n bits' do
