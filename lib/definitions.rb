@@ -137,7 +137,6 @@ end
 Instruction.define :LD do
   include_transaction :register_to_bus
   include_transaction :bus_to_a
-  include_transaction :clear_bus
 end
 
 ##
@@ -145,7 +144,6 @@ end
 Instruction.define :LDI do
   include_transaction :operand_to_bus
   include_transaction :bus_to_a
-  include_transaction :clear_bus
 end
 
 ##
@@ -153,7 +151,6 @@ end
 Instruction.define :LDM do
   define_step -> { Computer::BUS.value = Computer::RAM[Computer::INSTRUCTION.value & 0xfff].value }
   include_transaction :bus_to_a
-  include_transaction :clear_bus
 end
 
 ##
