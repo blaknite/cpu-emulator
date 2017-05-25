@@ -123,14 +123,14 @@ end
 ##
 # Jump to memory address and save previous address to stack
 Instruction.define :CALL do
-  define_step -> { Computer::STACK.pointer.value -= 1 }
+  define_step -> { Computer::STACK.pointer.value += 1 }
   define_step -> { Computer::STACK.value = Computer::INSTRUCTION.value }
 end
 
 ##
 # Jump to memory address one down in stack
 Instruction.define :RET do
-  define_step -> { Computer::STACK.pointer.value += 1 }
+  define_step -> { Computer::STACK.pointer.value -= 1 }
 end
 
 ##

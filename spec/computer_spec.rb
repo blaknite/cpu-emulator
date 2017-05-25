@@ -145,8 +145,8 @@ RSpec.describe Computer do
       expect(Computer::STACK.value).to eq 0x04c
     end
 
-    it 'decrements the stack pointer' do
-      expect(Computer::STACK.pointer.value).to eq 0x3
+    it 'increments the stack pointer' do
+      expect(Computer::STACK.pointer.value).to eq 0x1
     end
   end
 
@@ -154,7 +154,7 @@ RSpec.describe Computer do
     before do
       Computer::RAM[0x000].value = 0x40
 
-      Computer::STACK.registers[1].value = 0x4c
+      Computer::STACK.registers[3].value = 0x4c
 
       5.times { Computer.clock! }
     end
@@ -163,8 +163,8 @@ RSpec.describe Computer do
       expect(Computer::STACK.value).to eq 0x04c
     end
 
-    it 'increments the stack pointer' do
-      expect(Computer::STACK.pointer.value).to eq 0x1
+    it 'decrements the stack pointer' do
+      expect(Computer::STACK.pointer.value).to eq 0x3
     end
   end
 
