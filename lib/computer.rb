@@ -11,7 +11,7 @@ module Computer
   INSTRUCTION = Register.new(16)
   RAM         = Array.new(4096) { Register.new(8) }
   REGISTER    = Array.new(16)   { Register.new(8) }
-  STACK       = Stack.new(12)
+  STACK       = Stack.new(12, 2)
   ZERO        = Register.new(1)
 
   CYCLE = InstructionCycle.new

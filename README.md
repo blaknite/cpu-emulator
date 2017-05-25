@@ -48,7 +48,7 @@ HEX : BIN  : CODE : T : DESCRIPTION
 0x0 : 0000 : JMP  :  9 : Jump to memory address unconditionally.
 0x1 : 0001 : JC   :  9 : Jump to memory address if carry.
 0x2 : 0010 : JZ   :  9 : Jump to memory address if zero.
-0x3 : 0011 : CALL :  9 : Jump to memory address and save previous address to stack.
+0x3 : 0011 : CALL : 10 : Jump to memory address and save previous address to stack.
 0x4 : 0100 : RET  :  5 : Jump to memory address one down in stack.
 0x5 : 0101 : LD   :  7 : Load register to accumulator.
 0x6 : 0110 : LDI  : 11 : Load immediate value to accumulator.

@@ -138,15 +138,15 @@ RSpec.describe Computer do
       Computer::RAM[0x000].value = 0x30
       Computer::RAM[0x001].value = 0x4c
 
-      9.times { Computer.clock! }
+      10.times { Computer.clock! }
     end
 
-    it 'sets the value of the top of the stack' do
+    it 'sets the value of the stack' do
       expect(Computer::STACK.value).to eq 0x04c
     end
 
-    it 'pushes the top value down the stack' do
-      expect(Computer::STACK.registers[2].value).to eq 0x002
+    it 'decrements the stack pointer' do
+      expect(Computer::STACK.pointer.value).to eq 0x3
     end
   end
 
@@ -154,13 +154,17 @@ RSpec.describe Computer do
     before do
       Computer::RAM[0x000].value = 0x40
 
-      Computer::STACK.registers[2].value = 0x4c
+      Computer::STACK.registers[1].value = 0x4c
 
       5.times { Computer.clock! }
     end
 
-    it 'pushes the second value up the stack' do
+    it 'returns the next value up the stack' do
       expect(Computer::STACK.value).to eq 0x04c
+    end
+
+    it 'increments the stack pointer' do
+      expect(Computer::STACK.pointer.value).to eq 0x1
     end
   end
 
