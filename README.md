@@ -9,6 +9,10 @@ https://www.thelanbox.com.au/forum/t/building-a-4-bit-computer-from-scratch
 The CPU uses a minimal instruction set with provisions for conditional jumps and subroutines.
 Each op-code is 4 bits with instructions being either 8 or 16 bits in length.
 
+## Schematic
+
+![schematic diagram](https://d1bh5m8o3ysx9y.cloudfront.net/uploads/images/943c727f-70fc-4670-8026-ad860d14fe9d.png)
+
 ## Instructions
 
 ### Single-byte Instructions
