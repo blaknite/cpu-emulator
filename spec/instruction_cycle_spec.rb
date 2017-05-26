@@ -2,6 +2,7 @@ require 'spec_helper'
 
 RSpec.describe InstructionCycle do
   let(:instruction_cycle) { InstructionCycle.new }
+  let(:current_state) { instruction_cycle.send(:current_state) }
 
   describe '#reset!' do
     before do
@@ -10,11 +11,11 @@ RSpec.describe InstructionCycle do
     end
 
     it 'should reset the state' do
-      expect(instruction_cycle.state).to eq :fetch
+      expect(current_state).to be_a InstructionCycle::Fetch
     end
 
     it 'should reset the counter' do
-      expect(instruction_cycle.counter).to eq 0
+      expect(current_state.counter).to eq 0
     end
   end
 
@@ -24,11 +25,11 @@ RSpec.describe InstructionCycle do
     end
 
     it 'increment the counter' do
-      expect(instruction_cycle.counter).to eq 1
+      expect(current_state.counter).to eq 1
     end
 
     it 'should load a transaction' do
-      expect(instruction_cycle.steps).not_to be_empty
+      expect(current_state.steps).not_to be_empty
     end
   end
 end
