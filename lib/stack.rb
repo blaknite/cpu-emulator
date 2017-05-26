@@ -16,10 +16,6 @@ class Stack
     current_register.value
   end
 
-  def to_int
-    current_register.to_int
-  end
-
   alias_method :to_int, :value
   alias_method :to_i, :value
 
