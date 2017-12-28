@@ -5,7 +5,7 @@ class Stack
     @bits = bits
     @depth = depth
     @pointer = Register.new(depth)
-    @registers = Array.new(4) { Register.new(bits) }
+    @registers = Array.new(depth) { Register.new(bits) }
   end
 
   def value=(value)
