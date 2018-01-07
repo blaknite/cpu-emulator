@@ -4,7 +4,8 @@ class Stack
   def initialize(bits, depth)
     @bits = bits
     @depth = depth
-    @pointer = Register.new(depth)
+    bit_length = (depth - 1).bit_length
+    @pointer = Register.new(bit_length)
     @registers = Array.new(depth) { Register.new(bits) }
   end
 
@@ -32,8 +33,8 @@ class Stack
   end
 
   def reset!
-    pointer.value = 0
-    registers.each { |r| r.value = 0 }
+    pointer.reset!
+    registers.each(&:reset!)
   end
 
   private

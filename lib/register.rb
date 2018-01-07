@@ -30,35 +30,8 @@ class Register
   def to_bin
     bits.downto(1).map{ |bit| value[bit - 1].to_s }.join
   end
-end
 
-class OutputRegister < Register
-  attr_accessor :filename
-
-  def initialize(address = nil, value = 0)
-    @filename = "tmp/output#{'_' + address.to_s(16) if address}.txt"
-    File.open(@filename, 'w'){ |f| f << nil }
-    @bits = 8
-    @value = 0
-  end
-
-  def value=(new_value)
-    super(new_value)
-    File.open(@filename, 'a'){ |f| f << [new_value].pack('C*') }
-  end
-end
-
-class InputRegister < Register
-  attr_accessor :filename
-
-  def initialize(address = nil, value = 0)
-    @filename = "tmp/input#{'_' + address.to_s(16) if address}.txt"
-    @file = File.open(@filename, 'w+')
-    @file.write(nil)
-    super(8, value)
-  end
-
-  def value
-    @file.getbyte || 0x00
+  def reset!
+    self.value = 0
   end
 end

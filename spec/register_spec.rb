@@ -87,27 +87,3 @@ RSpec.describe Register do
     end
   end
 end
-
-RSpec.describe InputRegister do
-  describe 'value' do
-    let(:register) { InputRegister.new }
-
-    it 'reads the input file' do
-      expect(register.value).to eq(File.open(register.filename, 'r').read.unpack('C*')[0] || 0x00)
-    end
-  end
-end
-
-RSpec.describe OutputRegister do
-  describe 'value=' do
-    let(:register) { OutputRegister.new }
-
-    it 'appends the output file' do
-      register.value = 'f'.ord
-      register.value = 'o'.ord
-      register.value = 'o'.ord
-
-      expect(File.open(register.filename, 'r').read[-3..-1]).to eq("foo")
-    end
-  end
-end

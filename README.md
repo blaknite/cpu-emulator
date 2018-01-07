@@ -47,8 +47,8 @@ Each op-code is 4 bits with instructions being either 8 or 16 bits in length.
 
 ### Op-Codes
 ```
-HEX : BIN  : CODE : T : DESCRIPTION
-----+------+------+---+------------------------------------------------------------
+HEX : BIN  : CODE :  T : DESCRIPTION
+----+------+------+----+------------------------------------------------------------
 0x0 : 0000 : JMP  :  9 : Jump to memory address unconditionally.
 0x1 : 0001 : JC   :  9 : Jump to memory address if carry.
 0x2 : 0010 : JZ   :  9 : Jump to memory address if zero.
@@ -69,10 +69,12 @@ HEX : BIN  : CODE : T : DESCRIPTION
 * T is the number of clock cycles required to perform the instruction
 ```
 
-## Memory-mapped I/O
-Memory addresses `0xff0` to `0xff7` are reserved as input registers.
-Memory addresses `0xff8` to `0xfff` are reserved as output registers.
-Writing to an input address is ignored. Reading from an output address reads the most recent output.
+## Register-mapped Serial I/O
+
+Registers `0xe` to `0xf` are reserved as Serial I/O registers and are attached to your terminal
+at run-time. Write to `0xf` to display something on the terminal and read from `0xe` to get the
+terminal input. I/O operates with a circular buffer of 8 bytes which will write over itself when
+full.
 
 ## Example
 
@@ -91,6 +93,10 @@ Assembling program..........complete!
 0x60 0x04 0xd0 0x04 0x9f 0xff 0x00 0x06
 
 $ ruby bin/run.rb examples/test.bin
+Program loaded!
+Running...
+
+$ cat tmp/debug.log
 Program loaded!
 Running...
 0x000 - |####|####|###| - LDI

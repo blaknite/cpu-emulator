@@ -28,6 +28,6 @@ class InstructionCycle
   end
 
   def print!
-    print current_state.to_s
+    Computer.log current_state.to_s
   end
 end
