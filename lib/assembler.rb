@@ -13,7 +13,7 @@ class Assembler
     /^\s+/i => 'WHITESPACE',
   }
 
-  LINE = /^([\w=\s(('.')|("."))]+)?(;.*)?$/i
+  LINE = /^(([\w=\s]+)?(\s'.'|\s".")?)?(;.*)?$/i
   COMMENT = /^COMMENT$/
   IDENTIFIER = /^IDENTIFIER/
   IDENTIFIER_ASSIGNMENT = /^IDENTIFIER WHITESPACE ASSIGNMENT WHITESPACE (BINARY|DECIMAL|HEXIDECIMAL|LETTER)( WHITESPACE COMMENT)?$/
