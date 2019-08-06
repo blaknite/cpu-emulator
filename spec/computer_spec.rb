@@ -69,7 +69,7 @@ RSpec.describe Computer do
       Computer::RAM[0x000].value = 0x00
       Computer::RAM[0x001].value = 0x4c
 
-      9.times { Computer::CYCLE.clock! }
+      7.times { Computer::CYCLE.clock! }
     end
 
     it 'sets the value of the top of the stack' do
@@ -87,7 +87,7 @@ RSpec.describe Computer do
       before do
         Computer::CARRY.value = 0
 
-        9.times { Computer::CYCLE.clock! }
+        7.times { Computer::CYCLE.clock! }
       end
 
       it 'does not set the value of the top of the stack' do
@@ -99,7 +99,7 @@ RSpec.describe Computer do
       before do
         Computer::CARRY.value = 1
 
-        9.times { Computer::CYCLE.clock! }
+        7.times { Computer::CYCLE.clock! }
       end
 
       it 'sets the value of the top of the stack' do
@@ -118,7 +118,7 @@ RSpec.describe Computer do
       before do
         Computer::ZERO.value = 0
 
-        9.times { Computer::CYCLE.clock! }
+        7.times { Computer::CYCLE.clock! }
       end
 
       it 'does not set the value of the top of the stack' do
@@ -130,7 +130,7 @@ RSpec.describe Computer do
       before do
         Computer::ZERO.value = 1
 
-        9.times { Computer::CYCLE.clock! }
+        7.times { Computer::CYCLE.clock! }
       end
 
       it 'sets the value of the top of the stack' do
@@ -144,7 +144,7 @@ RSpec.describe Computer do
       Computer::RAM[0x000].value = 0x30
       Computer::RAM[0x001].value = 0x4c
 
-      10.times { Computer::CYCLE.clock! }
+      8.times { Computer::CYCLE.clock! }
     end
 
     it 'sets the value of the stack' do
@@ -162,7 +162,7 @@ RSpec.describe Computer do
 
       Computer::STACK.registers[3].value = 0x4c
 
-      5.times { Computer::CYCLE.clock! }
+      4.times { Computer::CYCLE.clock! }
     end
 
     it 'returns the next value up the stack' do
@@ -181,7 +181,7 @@ RSpec.describe Computer do
 
       Computer::REGISTER[0x0].value = 0x4c
 
-      7.times { Computer::CYCLE.clock! }
+      5.times { Computer::CYCLE.clock! }
     end
 
     it 'should change the value of A' do
@@ -194,7 +194,7 @@ RSpec.describe Computer do
       Computer::RAM[0x000].value = 0x60
       Computer::RAM[0x001].value = 0x4c
 
-      11.times { Computer::CYCLE.clock! }
+      8.times { Computer::CYCLE.clock! }
     end
 
     it 'should change the value of A' do
@@ -208,7 +208,7 @@ RSpec.describe Computer do
       Computer::RAM[0x001].value = 0xff
       Computer::RAM[0xfff].value = 0x4c
 
-      11.times { Computer::CYCLE.clock! }
+      8.times { Computer::CYCLE.clock! }
     end
 
     it 'should change the value of A' do
@@ -223,7 +223,7 @@ RSpec.describe Computer do
 
       Computer::A.value = 0x4c
 
-      7.times { Computer::CYCLE.clock! }
+      5.times { Computer::CYCLE.clock! }
     end
 
     it 'should change the value of A' do
@@ -238,7 +238,7 @@ RSpec.describe Computer do
 
       Computer::A.value = 0x4c
 
-      11.times { Computer::CYCLE.clock! }
+      9.times { Computer::CYCLE.clock! }
     end
 
     it 'should change the value of A' do
@@ -258,7 +258,7 @@ RSpec.describe Computer do
         Computer::A.value = '00000000'.to_i(2)
         Computer::REGISTER[0x0].value = '01010101'.to_i(2)
 
-        10.times { Computer::CYCLE.clock! }
+        8.times { Computer::CYCLE.clock! }
       end
 
       it 'should change the value of A' do
@@ -275,7 +275,7 @@ RSpec.describe Computer do
         Computer::A.value = '10101010'.to_i(2)
         Computer::REGISTER[0x0].value = '01010101'.to_i(2)
 
-        10.times { Computer::CYCLE.clock! }
+        8.times { Computer::CYCLE.clock! }
       end
 
       it 'sets the value of ZERO to 1' do
@@ -292,7 +292,7 @@ RSpec.describe Computer do
         Computer::A.value = '00000000'.to_i(2)
         Computer::REGISTER[0x0].value = '01010101'.to_i(2)
 
-        10.times { Computer::CYCLE.clock! }
+        8.times { Computer::CYCLE.clock! }
       end
 
       it 'sets the value of ZERO to 0' do
@@ -312,7 +312,7 @@ RSpec.describe Computer do
 
         Computer::A.value = '00000000'.to_i(2)
 
-        14.times { Computer::CYCLE.clock! }
+        12.times { Computer::CYCLE.clock! }
       end
 
       it 'should change the value of A' do
@@ -328,7 +328,7 @@ RSpec.describe Computer do
 
         Computer::A.value = '10101010'.to_i(2)
 
-        14.times { Computer::CYCLE.clock! }
+        12.times { Computer::CYCLE.clock! }
       end
 
       it 'sets the value of ZERO to 1' do
@@ -344,7 +344,7 @@ RSpec.describe Computer do
 
         Computer::A.value = '00000000'.to_i(2)
 
-        14.times { Computer::CYCLE.clock! }
+        12.times { Computer::CYCLE.clock! }
       end
 
       it 'sets the value of ZERO to 0' do
@@ -364,7 +364,7 @@ RSpec.describe Computer do
         Computer::A.value = 0x01
         Computer::REGISTER[0x0].value = 0x01
 
-        10.times { Computer::CYCLE.clock! }
+        8.times { Computer::CYCLE.clock! }
       end
 
       it 'should change the value of A' do
@@ -379,7 +379,7 @@ RSpec.describe Computer do
         Computer::A.value = 0xff
         Computer::REGISTER[0x0].value = 0x01
 
-        10.times { Computer::CYCLE.clock! }
+        8.times { Computer::CYCLE.clock! }
       end
 
       it 'sets the value of zero to 1' do
@@ -394,7 +394,7 @@ RSpec.describe Computer do
         Computer::A.value = 0xfe
         Computer::REGISTER[0x0].value = 0x01
 
-        10.times { Computer::CYCLE.clock! }
+        8.times { Computer::CYCLE.clock! }
       end
 
       it 'sets the value of zero to 0' do
@@ -409,7 +409,7 @@ RSpec.describe Computer do
         Computer::A.value = 0xff
         Computer::REGISTER[0x0].value = 0x01
 
-        10.times { Computer::CYCLE.clock! }
+        8.times { Computer::CYCLE.clock! }
       end
 
       it 'sets the value of carry to 1' do
@@ -424,7 +424,7 @@ RSpec.describe Computer do
         Computer::A.value = 0xfe
         Computer::REGISTER[0x0].value = 0x01
 
-        10.times { Computer::CYCLE.clock! }
+        8.times { Computer::CYCLE.clock! }
       end
 
       it 'sets the value of carry to 0' do
@@ -444,7 +444,7 @@ RSpec.describe Computer do
 
         Computer::A.value = 0x01
 
-        14.times { Computer::CYCLE.clock! }
+        12.times { Computer::CYCLE.clock! }
       end
 
       it 'should change the value of A' do
@@ -460,7 +460,7 @@ RSpec.describe Computer do
 
         Computer::A.value = 0x00
 
-        14.times { Computer::CYCLE.clock! }
+        12.times { Computer::CYCLE.clock! }
       end
 
       it 'sets the value of zero to 1' do
@@ -476,7 +476,7 @@ RSpec.describe Computer do
 
         Computer::A.value = 0x00
 
-        14.times { Computer::CYCLE.clock! }
+        12.times { Computer::CYCLE.clock! }
       end
 
       it 'sets the value of zero to 0' do
@@ -492,7 +492,7 @@ RSpec.describe Computer do
 
         Computer::A.value = 0xff
 
-        14.times { Computer::CYCLE.clock! }
+        12.times { Computer::CYCLE.clock! }
       end
 
       it 'sets the value of carry to 1' do
@@ -508,7 +508,7 @@ RSpec.describe Computer do
 
         Computer::A.value = 0xfe
 
-        14.times { Computer::CYCLE.clock! }
+        12.times { Computer::CYCLE.clock! }
       end
 
       it 'sets the value of carry to 0' do
@@ -527,7 +527,7 @@ RSpec.describe Computer do
       before do
         Computer::REGISTER[0x0].value = 0x01
 
-        9.times { Computer::CYCLE.clock! }
+        6.times { Computer::CYCLE.clock! }
       end
 
       it 'should not change the value of A' do
@@ -542,7 +542,7 @@ RSpec.describe Computer do
         Computer::A.value = 0xff
         Computer::REGISTER[0x0].value = 0xff
 
-        8.times { Computer::CYCLE.clock! }
+        6.times { Computer::CYCLE.clock! }
       end
 
       it 'sets the value of zero to 1' do
@@ -557,7 +557,7 @@ RSpec.describe Computer do
         Computer::A.value = 0xff
         Computer::REGISTER[0x0].value = 0x01
 
-        8.times { Computer::CYCLE.clock! }
+        6.times { Computer::CYCLE.clock! }
       end
 
       it 'sets the value of zero to 0' do
@@ -572,7 +572,7 @@ RSpec.describe Computer do
         Computer::A.value = 0x00
         Computer::REGISTER[0x0].value = 0x01
 
-        8.times { Computer::CYCLE.clock! }
+        6.times { Computer::CYCLE.clock! }
       end
 
       it 'sets the value of carry to 1' do
@@ -587,7 +587,7 @@ RSpec.describe Computer do
         Computer::A.value = 0xff
         Computer::REGISTER[0x0].value = 0x01
 
-        8.times { Computer::CYCLE.clock! }
+        6.times { Computer::CYCLE.clock! }
       end
 
       it 'sets the value of carry to 0' do
@@ -605,7 +605,7 @@ RSpec.describe Computer do
       before do
         Computer::RAM[0x001].value = 0x01
 
-        12.times { Computer::CYCLE.clock! }
+        9.times { Computer::CYCLE.clock! }
       end
 
       it 'should not change the value of A' do
@@ -621,7 +621,7 @@ RSpec.describe Computer do
 
         Computer::A.value = 0xff
 
-        12.times { Computer::CYCLE.clock! }
+        9.times { Computer::CYCLE.clock! }
       end
 
       it 'sets the value of zero to 1' do
@@ -637,7 +637,7 @@ RSpec.describe Computer do
 
         Computer::A.value = 0xff
 
-        12.times { Computer::CYCLE.clock! }
+        9.times { Computer::CYCLE.clock! }
       end
 
       it 'sets the value of zero to 0' do
@@ -653,7 +653,7 @@ RSpec.describe Computer do
 
         Computer::A.value = 0x00
 
-        12.times { Computer::CYCLE.clock! }
+        9.times { Computer::CYCLE.clock! }
       end
 
       it 'sets the value of carry to 1' do
@@ -669,7 +669,7 @@ RSpec.describe Computer do
 
         Computer::A.value = 0xff
 
-        12.times { Computer::CYCLE.clock! }
+        9.times { Computer::CYCLE.clock! }
       end
 
       it 'sets the value of carry to 0' do
@@ -681,7 +681,7 @@ RSpec.describe Computer do
   context 'when running a program' do
     before do
       Computer.load_file('spec/support/test.bin')
-      45.times { Computer::CYCLE.clock! }
+      33.times { Computer::CYCLE.clock! }
     end
 
     it 'should run the program' do

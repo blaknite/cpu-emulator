@@ -5,12 +5,6 @@ require 'instruction'
 # TRANSACTION DEFINITIONS
 
 ##
-# Sets the bus to zero
-Transaction.define :clear_bus do
-  define_step -> { Computer::BUS.value = 0 }
-end
-
-##
 # Incerments the top-most value on the stack for program execution
 Transaction.define :increment_program do
   define_step -> { Computer::STACK.value += 1 }
@@ -26,14 +20,12 @@ end
 # Moves the bust value to A
 Transaction.define :bus_to_a do
   define_step -> { Computer::A.value = Computer::BUS.value }
-  include_transaction :clear_bus
 end
 
 ##
 # Moves the bus value to B
 Transaction.define :bus_to_b do
   define_step -> { Computer::B.value = Computer::BUS.value }
-  include_transaction :clear_bus
 end
 
 ##
@@ -85,7 +77,6 @@ end
 Transaction.define :fetch_first_byte do
   define_step -> { Computer::BUS.value = Computer::RAM[Computer::STACK.value].value }
   define_step -> { Computer::INSTRUCTION.value = Computer::BUS.value << 0x08 }
-  include_transaction :clear_bus
   include_transaction :increment_program
 end
 
@@ -94,7 +85,6 @@ end
 Transaction.define :fetch_second_byte do
   define_step -> { Computer::BUS.value = Computer::RAM[Computer::STACK.value].value }
   define_step -> { Computer::INSTRUCTION.value += Computer::BUS.value }
-  include_transaction :clear_bus
   include_transaction :increment_program
 end
 
@@ -159,7 +149,6 @@ end
 Instruction.define :ST do
   include_transaction :a_to_bus
   define_step -> { Computer::REGISTER[Computer::INSTRUCTION.value >> 8 & 0xf].value = Computer::BUS.value }
-  include_transaction :clear_bus
 end
 
 ##
@@ -167,7 +156,6 @@ end
 Instruction.define :STM do
   include_transaction :a_to_bus
   define_step -> { Computer::RAM[Computer::INSTRUCTION.value & 0xfff].value = Computer::BUS.value }
-  include_transaction :clear_bus
 end
 
 ##
