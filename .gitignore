@@ -1,2 +1,3 @@
 examples/*.bin
 tmp/*
+vendor/ruby
