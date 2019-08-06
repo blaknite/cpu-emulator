@@ -11,11 +11,7 @@ RSpec.describe InstructionCycle do
     end
 
     it 'should reset the state' do
-      expect(current_state).to be_a InstructionCycle::Fetch
-    end
-
-    it 'should reset the counter' do
-      expect(current_state.counter).to eq 0
+      expect(current_state).to eq :fetch_first_byte
     end
   end
 
@@ -24,12 +20,8 @@ RSpec.describe InstructionCycle do
       1.times { instruction_cycle.clock! }
     end
 
-    it 'increment the counter' do
-      expect(current_state.counter).to eq 1
-    end
-
     it 'should load a transaction' do
-      expect(current_state.steps).not_to be_empty
+      expect(instruction_cycle.steps).not_to be_empty
     end
   end
 end
