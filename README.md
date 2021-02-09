@@ -1,6 +1,6 @@
 # Emulating an 8-bit Computer design in Ruby
 
-[![Build Status](https://travis-ci.org/blaknite/cpu-emulator.svg?branch=master)](https://travis-ci.org/blaknite/cpu-emulator)
+[![Build status](https://badge.buildkite.com/79601937713cccb07e1f81f06497cb7d06f5c6b3c11b1f5fb0.svg)](https://buildkite.com/blaknite/cpu-emulator)
 
 Started out as a 4-bit computer but grew as I wanted to do more with it. Original idea here:
 

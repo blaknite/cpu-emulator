@@ -8,13 +8,13 @@ RSpec.describe Instruction do
   context 'when defining an instruction' do
     context 'when the instruction is valid' do
       it 'should define the instruction' do
-        expect{ Instruction.define :JMP {} }.not_to raise_error
+        expect{ Instruction.define(:JMP) {} }.not_to raise_error
       end
     end
 
     context 'when the instruction is invalid' do
       it 'should define the instruction' do
-        expect{ Instruction.define :test {} }.to raise_error(StandardError, 'invalid instruction: test')
+        expect{ Instruction.define(:test) {} }.to raise_error(StandardError, 'invalid instruction: test')
       end
     end
   end
